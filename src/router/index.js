@@ -1,4 +1,4 @@
-import { ref } from "vue";
+// import { ref } from "vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
@@ -19,17 +19,17 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  // const authStore = useAuthStore();
-  // const { user } = storeToRefs(authStore);
-  const user = ref(false);
-  if (to.name !== "register" && !user.value) {
-    next({ name: "register" });
-  } else if ((to.name === "register" || to.name === "login") && user.value) {
-    next({ name: "PollList" });
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   // const authStore = useAuthStore();
+//   // const { user } = storeToRefs(authStore);
+//   const user = ref(false);
+//   if (to.name !== "register" && !user.value) {
+//     next({ name: "register" || to.name === "login"  });
+//   } else if ((to.name === "register" || to.name === "login") && user.value) {
+//     next({ name: "PollList" });
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

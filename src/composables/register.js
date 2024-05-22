@@ -1,0 +1,95 @@
+import { useAuthStore } from "@/stores/authStore";
+import { authenticate } from "@/utils/authenticate";
+import { onUpdated, reactive, ref } from "vue";
+
+export const useRegister = () => {
+  const { handleRegister } = useAuthStore();
+  const userData = reactive({
+    firstName: "test",
+    lastName: "name",
+    mobileNo: "1234567890",
+    profilePhoto: null,
+    email: "test@gmail.com",
+    password: "qweR123$",
+    confirmPassword: "qweR123$",
+  });
+
+  const errorMessage = reactive({
+    firstName: "",
+    lastName: "",
+    mobileNo: "",
+    profilePhoto: null,
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const validateForm = ref(false);
+
+  onUpdated(() => {
+    console.log("---");
+  });
+
+  const uploadImage = async (e) => {
+    const image = e.target.files[0];
+    const reader = new FileReader();
+
+    const readFileAsync = (file) => {
+      return new Promise((resolve, reject) => {
+        reader.onload = (event) => {
+          resolve(event.target.result);
+        };
+        reader.onerror = (error) => {
+          reject(error);
+        };
+        reader.readAsDataURL(file);
+      });
+    };
+
+    try {
+      userData.profilePhoto = await readFileAsync(image);
+      validate("profilePhoto");
+    } catch (error) {
+      console.error("Error reading file:", error);
+    }
+  };
+
+  const validate = (fieldName) => {
+    if (validateForm.value) {
+      if (fieldName === "confirmPassword") {
+        errorMessage[fieldName] = authenticate(fieldName, [
+          userData.password,
+          userData.confirmPassword,
+        ]);
+      } else {
+        const minChar = fieldName === "mobileNo" ? 10 : 4;
+        errorMessage[fieldName] = authenticate(
+          fieldName,
+          userData[fieldName],
+          minChar
+        );
+      }
+    }
+  };
+
+  const isErrorPresent = (errorMessage) => {
+    let isPresent = false;
+    for (let key in errorMessage) {
+      if (errorMessage[key]) {
+        isPresent = true;
+      }
+    }
+    return isPresent;
+  };
+
+  const registerUser = () => {
+    validateForm.value = true;
+    for (let key in userData) {
+      validate(key);
+    }
+    if (!isErrorPresent(errorMessage)) {
+      handleRegister(userData);
+    }
+  };
+  return { userData, uploadImage, registerUser, errorMessage, validate };
+};
