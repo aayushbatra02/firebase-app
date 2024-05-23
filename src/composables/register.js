@@ -7,13 +7,13 @@ export const useRegister = () => {
   const { handleRegister } = useAuthStore();
   const { error } = storeToRefs(useAuthStore());
   const userData = reactive({
-    firstName: "test",
-    lastName: "name",
-    mobileNo: "1234567890",
+    firstName: "",
+    lastName: "",
+    mobileNo: "",
     profilePhoto: null,
-    email: "test@gmail.com",
-    password: "qweR123$",
-    confirmPassword: "qweR123$",
+    email: "",
+    password: "",
+    confirmPassword: "",
     image: null,
   });
 
@@ -66,7 +66,7 @@ export const useRegister = () => {
         const minChar = fieldName === "mobileNo" ? 10 : 4;
         errorMessage[fieldName] = authenticate(
           fieldName,
-          userData[fieldName],
+          userData[fieldName]?.toString(),
           minChar
         );
       }

@@ -10,7 +10,6 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "firebase": "^10.12.1",
-    "firebase-admin": "^12.1.0",
     "pinia": "^2.1.7",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
