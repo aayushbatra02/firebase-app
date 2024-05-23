@@ -1,5 +1,7 @@
-// import { ref } from "vue";
+import { auth } from "@/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import { createRouter, createWebHashHistory } from "vue-router";
+import NotFoundView from "../views/NotFoundView.vue"; 
 
 const routes = [
   {
@@ -12,6 +14,11 @@ const routes = [
     name: "register",
     component: () => import("../views/RegisterView.vue"),
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "notFound",
+    component: NotFoundView,
+  },
 ];
 
 const router = createRouter({
@@ -19,17 +26,28 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   // const authStore = useAuthStore();
-//   // const { user } = storeToRefs(authStore);
-//   const user = ref(false);
-//   if (to.name !== "register" && !user.value) {
-//     next({ name: "register" || to.name === "login"  });
-//   } else if ((to.name === "register" || to.name === "login") && user.value) {
-//     next({ name: "PollList" });
-//   } else {
-//     next();
-//   }
-// });
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject
+    );
+  });
+};
+
+router.beforeEach(async (to, from, next) => {
+  const user = await getCurrentUser();
+  if (to.name !== "register" && !user) {
+    next({ name: "register" });
+  } else if (to.name === "register" && user) {
+    next({ name: "home" });
+  } else {
+    next();
+  }
+});
 
 export default router;

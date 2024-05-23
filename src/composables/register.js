@@ -1,9 +1,11 @@
 import { useAuthStore } from "@/stores/authStore";
 import { authenticate } from "@/utils/authenticate";
-import { onUpdated, reactive, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { reactive, ref } from "vue";
 
 export const useRegister = () => {
   const { handleRegister } = useAuthStore();
+  const { error } = storeToRefs(useAuthStore());
   const userData = reactive({
     firstName: "test",
     lastName: "name",
@@ -12,6 +14,7 @@ export const useRegister = () => {
     email: "test@gmail.com",
     password: "qweR123$",
     confirmPassword: "qweR123$",
+    image: null,
   });
 
   const errorMessage = reactive({
@@ -25,10 +28,6 @@ export const useRegister = () => {
   });
 
   const validateForm = ref(false);
-
-  onUpdated(() => {
-    console.log("---");
-  });
 
   const uploadImage = async (e) => {
     const image = e.target.files[0];
@@ -48,13 +47,15 @@ export const useRegister = () => {
 
     try {
       userData.profilePhoto = await readFileAsync(image);
+      userData.image = image;
       validate("profilePhoto");
     } catch (error) {
-      console.error("Error reading file:", error);
+      console.error(error);
     }
   };
 
   const validate = (fieldName) => {
+    error.value = false;
     if (validateForm.value) {
       if (fieldName === "confirmPassword") {
         errorMessage[fieldName] = authenticate(fieldName, [

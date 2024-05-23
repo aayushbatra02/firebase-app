@@ -8,7 +8,7 @@
       <p>Connect | Share | Explore</p>
     </div>
     <form
-      class="flex flex-col gap-12 w-[50%] items-center justify-center my-12"
+      class="flex flex-col gap-8 w-[50%] items-center justify-center my-12"
     >
       <h1 class="text-3xl font-bold text-center text">REGISTER</h1>
       <div class="flex flex-col gap-6 items-center w-[50%]">
@@ -22,7 +22,7 @@
           />
           <p class="text-[red] mt-2">{{ errorMessage.firstName }}</p>
         </div>
-        <div class="w-[100%]"> 
+        <div class="w-[100%]">
           <input
             class="rounded p-3 bg-lightBg w-[100%]"
             type="text"
@@ -92,22 +92,28 @@
           <p class="text-[red] mt-2">{{ errorMessage.confirmPassword }}</p>
         </div>
       </div>
-
-      <button
-        class="bg-darkBg border-2 border-darkBg text-[white] py-3 rounded-lg w-[50%] hover:bg-white hover:text-darkBg text-lg"
-        @click="registerUser"
-      >
-        REGISTER
-      </button>
+      <div class="w-[50%]">
+        <p v-if="error" class="text-[red] mb-2">{{ error }}</p>
+        <button
+          class="bg-darkBg border-2 border-darkBg text-[white] py-3 rounded-lg w-[100%] hover:bg-white hover:text-darkBg text-lg"
+          @click="registerUser"
+        >
+          REGISTER
+        </button>
+      </div>
     </form>
   </div>
 </template>
 
   <script setup>
 import { useRegister } from "@/composables/register";
+import { useAuthStore } from "@/stores/authStore";
+import { storeToRefs } from "pinia";
 
 const { userData, uploadImage, registerUser, errorMessage, validate } =
   useRegister();
+
+const { error } = storeToRefs(useAuthStore());
 </script>
 
   <style lang="scss" scoped>
