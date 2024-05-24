@@ -25,7 +25,11 @@ export const useAuthStore = defineStore("authStore", () => {
       await createUserInFireStore(userData);
       router.push("/");
     } catch (error) {
-      state.error = error.message;
+      if (error.message.includes("email-already-in-use")) {
+        state.error = "Email already in use !";
+      } else {
+        state.error = error.message;
+      }
     } finally {
       state.loading = false;
     }

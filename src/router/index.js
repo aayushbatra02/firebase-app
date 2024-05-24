@@ -1,7 +1,7 @@
 import { auth } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { createRouter, createWebHashHistory } from "vue-router";
-import NotFoundView from "../views/NotFoundView.vue"; 
+import NotFoundView from "../views/NotFoundView.vue";
 
 const routes = [
   {
