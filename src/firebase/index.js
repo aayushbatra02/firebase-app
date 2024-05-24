@@ -3,16 +3,16 @@ import { getAuth } from "firebase/auth";
 import { collection, getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-
 const firebaseConfig = {
-  apiKey: "AIzaSyDeyiRz4rxcWNXdhhFTv2zCCdGsZCCUYdM",
-  authDomain: "test-10c5c.firebaseapp.com",
-  projectId: "test-10c5c",
-  storageBucket: "test-10c5c.appspot.com",
-  messagingSenderId: "997620516950",
-  appId: "1:997620516950:web:b04a4cc8d7ba3ed78753f7",
-  measurementId: "G-PKP0MVPWDH",
+  apiKey: process.env.VUE_APP_API_KEY,
+  authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_ID,
+  measurementId: process.env.VUE_APP_MEASURMENT_ID,
 };
+
 
 const firebaseapp = initializeApp(firebaseConfig);
 

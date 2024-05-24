@@ -1,8 +1,6 @@
   <template>
   <div class="md:flex justify-centerbg-white min-h-[100vh]">
-    <div
-      class="md:w-[50%]"
-    ></div>
+    <div class="md:w-[50%]"></div>
     <div
       class="md:w-[50%] flex items-center justify-center pt-12 flex-col md:bg-gradient-to-r from-[#2c7af5] to-darkBg md:text-[white] md:fixed top-0 bottom-0"
     >
@@ -59,12 +57,12 @@
                 type="file"
                 @change="uploadImage"
                 class="mt-4 w-[15rem]"
-                accept="image/*"
+                accept="profilePhoto/*"
               />
             </div>
             <img
-              v-if="userData.profilePhoto"
-              :src="userData.profilePhoto"
+              v-if="userData.imageUrl"
+              :src="userData.imageUrl"
               class="w-[6rem] h-[6rem] rounded-[50%] object-cover"
             />
           </div>
@@ -81,50 +79,55 @@
           <p class="text-[red] mt-2">{{ errorMessage.email }}</p>
         </div>
         <div class="w-[100%] relative">
-          <input
-            class="rounded p-3 bg-lightBg w-[100%]"
-            :type="showPassword ? 'text' : 'password'"
-            placeholder="Password"
-            v-model="userData.password"
-            @input="validate('password')"
-          />
-          <div class="absolute top-[25%] right-[-10%] cursor-pointer">
-            <Icon
-              icon="mdi:eye-outline"
-              class="text-black"
-              v-if="showPassword"
-              @click="togglePassword"
+          <div class="flex items-center">
+            <input
+              class="rounded p-3 bg-lightBg w-[100%] pr-[15%]"
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="Password"
+              v-model="userData.password"
+              @input="validate('password')"
             />
-            <Icon
-              v-else
-              icon="mdi:eye-off-outline"
-              class="text-black cursor-pointer"
-              @click="togglePassword"
-            />
+            <div class="absolute right-[5%] cursor-pointer">
+              <Icon
+                icon="mdi:eye-outline"
+                class="text-black"
+                v-if="showPassword"
+                @click="togglePassword"
+              />
+              <Icon
+                v-else
+                icon="mdi:eye-off-outline"
+                class="text-black cursor-pointer"
+                @click="togglePassword"
+              />
+            </div>
           </div>
+
           <p class="text-[red] mt-2">{{ errorMessage.password }}</p>
         </div>
         <div class="w-[100%] relative">
-          <input
-            class="rounded p-3 bg-lightBg w-[100%]"
-            :type="showConfirmPassword ? 'text' : 'password'"
-            placeholder="Confirm Password"
-            v-model="userData.confirmPassword"
-            @input="validate('confirmPassword')"
-          />
-          <div class="absolute top-[25%] right-[-10%] cursor-pointer">
-            <Icon
-              icon="mdi:eye-outline"
-              class="text-black"
-              v-if="showConfirmPassword"
-              @click="toggleConfirmPassword"
+          <div class="flex items-center">
+            <input
+              class="rounded p-3 bg-lightBg w-[100%]"
+              :type="showConfirmPassword ? 'text' : 'password'"
+              placeholder="Confirm Password"
+              v-model="userData.confirmPassword"
+              @input="validate('confirmPassword')"
             />
-            <Icon
-              v-else
-              icon="mdi:eye-off-outline"
-              class="text-black cursor-pointer"
-              @click="toggleConfirmPassword"
-            />
+            <div class="absolute right-[5%] cursor-pointer">
+              <Icon
+                icon="mdi:eye-outline"
+                class="text-black"
+                v-if="showConfirmPassword"
+                @click="toggleConfirmPassword"
+              />
+              <Icon
+                v-else
+                icon="mdi:eye-off-outline"
+                class="text-black cursor-pointer"
+                @click="toggleConfirmPassword"
+              />
+            </div>
           </div>
           <p class="text-[red] mt-2">{{ errorMessage.confirmPassword }}</p>
         </div>
@@ -144,18 +147,21 @@
         </button>
       </div>
     </form>
+    <confirmation-modal v-if="showConfirmationModal" @on-confirm-button="closeConfirmationModal" title="congratulations" description="User is created successfully !!!" confirm-button-text="OK"/>
   </div>
 </template>
 
-  <script setup>
-import { useRegister } from "@/composables/register";
-import { useAuthStore } from "@/stores/authStore";
+<script setup>
 import { storeToRefs } from "pinia";
 import { Icon } from "@iconify/vue";
+
+import { useRegister } from "@/composables/register";
+import { useAuthStore } from "@/stores/authStore";
 import SpinningLoader from "@/components/SpinningLoader.vue";
 import { useShowPassword } from "@/composables/showPassword";
+import ConfirmationModal from "@/components/ConfirmationModal.vue"
 
-const { userData, uploadImage, registerUser, errorMessage, validate } =
+const { userData, uploadImage, registerUser, errorMessage, validate, showConfirmationModal, closeConfirmationModal } =
   useRegister();
 
 const {

@@ -10,11 +10,11 @@ export const useRegister = () => {
     firstName: "",
     lastName: "",
     mobileNo: "",
-    profilePhoto: null,
+    imageUrl: null,
     email: "",
     password: "",
     confirmPassword: "",
-    image: null,
+    profilePhoto: null,
   });
 
   const errorMessage = reactive({
@@ -28,30 +28,13 @@ export const useRegister = () => {
   });
 
   const validateForm = ref(false);
+  const showConfirmationModal = ref(false);
 
   const uploadImage = async (e) => {
-    const image = e.target.files[0];
-    const reader = new FileReader();
-
-    const readFileAsync = (file) => {
-      return new Promise((resolve, reject) => {
-        reader.onload = (event) => {
-          resolve(event.target.result);
-        };
-        reader.onerror = (error) => {
-          reject(error);
-        };
-        reader.readAsDataURL(file);
-      });
-    };
-
-    try {
-      userData.profilePhoto = await readFileAsync(image);
-      userData.image = image;
-      validate("profilePhoto");
-    } catch (error) {
-      console.error(error);
-    }
+    const profilePhoto = e.target.files[0];
+    userData.profilePhoto = profilePhoto;
+    userData.imageUrl = URL.createObjectURL(profilePhoto);
+    validate("profilePhoto");
   };
 
   const validate = (fieldName) => {
@@ -83,14 +66,32 @@ export const useRegister = () => {
     return isPresent;
   };
 
-  const registerUser = () => {
+  const registerUser = async() => {
     validateForm.value = true;
-    for (let key in userData) {
+    for (let key in errorMessage) {
       validate(key);
     }
     if (!isErrorPresent(errorMessage)) {
-      handleRegister(userData);
+      await handleRegister(userData);
+      if (!error.value) {
+        showConfirmationModal.value = true;
+      }
     }
   };
-  return { userData, uploadImage, registerUser, errorMessage, validate };
+
+  const closeConfirmationModal = () => {
+    showConfirmationModal.value = !showConfirmationModal.value;
+    for (let key in userData) {
+      userData[key] = null;
+    }
+  };
+  return {
+    userData,
+    uploadImage,
+    registerUser,
+    errorMessage,
+    validate,
+    showConfirmationModal,
+    closeConfirmationModal,
+  };
 };

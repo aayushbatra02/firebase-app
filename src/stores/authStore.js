@@ -22,7 +22,8 @@ export const useAuthStore = defineStore("authStore", () => {
         userData.password
       );
       state.user = userCredential.user;
-      await createUserInFireStore(userData);
+      console.log(state.user)
+      await createUserInFireStore(userData, state.user.uid);
       router.push("/");
     } catch (error) {
       if (error.message.includes("email-already-in-use")) {
@@ -39,19 +40,20 @@ export const useAuthStore = defineStore("authStore", () => {
     firstName,
     lastName,
     mobileNo,
-    image,
+    profilePhoto,
     email,
-  }) => {
-    const storageRef = ref(storage, image.name);
-    const snapshot = await uploadBytes(storageRef, image);
+  }, uid) => {
+    const storageRef = ref(storage, uid);
+    const snapshot = await uploadBytes(storageRef, profilePhoto);
     const downloadURL = await getDownloadURL(snapshot.ref);
 
     addDoc(usersRef, {
       firstName,
       lastName,
       mobileNo,
-      image: downloadURL,
+      profilePhoto: downloadURL,
       email,
+      uid
     });
   };
 
