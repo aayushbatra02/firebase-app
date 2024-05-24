@@ -1,7 +1,10 @@
   <template>
   <div class="md:flex justify-centerbg-white min-h-[100vh]">
     <div
-      class="md:w-[50%] flex items-center justify-center pt-12 flex-col md:bg-gradient-to-r from-[#2c7af5] to-darkBg md:text-[white]"
+      class="md:w-[50%]"
+    ></div>
+    <div
+      class="md:w-[50%] flex items-center justify-center pt-12 flex-col md:bg-gradient-to-r from-[#2c7af5] to-darkBg md:text-[white] md:fixed top-0 bottom-0"
     >
       <p class="text-xl mb-4 md:mb-12">Welcome To</p>
       <h1
@@ -12,11 +15,11 @@
       <p>Connect | Share | Explore</p>
     </div>
     <form
-      class="flex flex-col gap-8 w-[95%] md:w-[50%] sm:w-[80%] items-center justify-center mx-auto my-12 border border-[3px] border-darkBg rounded-xl py-8 md:py-0 md:border-none"
+      class="flex flex-col gap-6 w-[95%] md:w-[50%] sm:w-[80%] items-center justify-center mx-auto my-12 border border-[3px] border-darkBg rounded-xl py-8 md:py-0 md:border-none"
     >
       <h1 class="text-3xl font-bold text-center text">REGISTER</h1>
       <div
-        class="flex flex-col gap-6 items-center w-[80%] sm:w-[70%] md:w-[50%]"
+        class="flex flex-col gap-4 items-center w-[80%] sm:w-[70%] md:w-[50%]"
       >
         <div class="w-[100%]">
           <input
@@ -49,7 +52,7 @@
           <p class="text-[red] mt-2">{{ errorMessage.mobileNo }}</p>
         </div>
         <div class="w-[100%]">
-          <div class="flex">
+          <div class="flex justify-between gap-2 flex-row flex-wrap">
             <div class="flex flex-col">
               <label class="text-[gray]">Profile Photo</label>
               <input
@@ -77,24 +80,52 @@
           />
           <p class="text-[red] mt-2">{{ errorMessage.email }}</p>
         </div>
-        <div class="w-[100%]">
+        <div class="w-[100%] relative">
           <input
             class="rounded p-3 bg-lightBg w-[100%]"
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             placeholder="Password"
             v-model="userData.password"
             @input="validate('password')"
           />
+          <div class="absolute top-[25%] right-[-10%] cursor-pointer">
+            <Icon
+              icon="mdi:eye-outline"
+              class="text-black"
+              v-if="showPassword"
+              @click="togglePassword"
+            />
+            <Icon
+              v-else
+              icon="mdi:eye-off-outline"
+              class="text-black cursor-pointer"
+              @click="togglePassword"
+            />
+          </div>
           <p class="text-[red] mt-2">{{ errorMessage.password }}</p>
         </div>
-        <div class="w-[100%]">
+        <div class="w-[100%] relative">
           <input
             class="rounded p-3 bg-lightBg w-[100%]"
-            type="password"
+            :type="showConfirmPassword ? 'text' : 'password'"
             placeholder="Confirm Password"
             v-model="userData.confirmPassword"
             @input="validate('confirmPassword')"
           />
+          <div class="absolute top-[25%] right-[-10%] cursor-pointer">
+            <Icon
+              icon="mdi:eye-outline"
+              class="text-black"
+              v-if="showConfirmPassword"
+              @click="toggleConfirmPassword"
+            />
+            <Icon
+              v-else
+              icon="mdi:eye-off-outline"
+              class="text-black cursor-pointer"
+              @click="toggleConfirmPassword"
+            />
+          </div>
           <p class="text-[red] mt-2">{{ errorMessage.confirmPassword }}</p>
         </div>
       </div>
@@ -120,10 +151,19 @@
 import { useRegister } from "@/composables/register";
 import { useAuthStore } from "@/stores/authStore";
 import { storeToRefs } from "pinia";
-import SpinningLoader from "@/components/SpinningLoader.vue"
+import { Icon } from "@iconify/vue";
+import SpinningLoader from "@/components/SpinningLoader.vue";
+import { useShowPassword } from "@/composables/showPassword";
 
 const { userData, uploadImage, registerUser, errorMessage, validate } =
   useRegister();
+
+const {
+  showPassword,
+  showConfirmPassword,
+  togglePassword,
+  toggleConfirmPassword,
+} = useShowPassword();
 
 const { error, loading } = storeToRefs(useAuthStore());
 </script>

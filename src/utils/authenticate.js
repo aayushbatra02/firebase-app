@@ -29,33 +29,31 @@ export const authenticate = (fieldName, value, condition) => {
       case "Email": {
         if (!checkEmailRegex(value)) {
           return `Invalid ${fieldName}`;
-        } else {
-          return null;
         }
+        break;
       }
       case "Password": {
         if (!checkPasswordRegex(value) && condition !== "login") {
           return `min 8 letters, at least a special character, upper and lower case letters and a number`;
-        } else {
-          return null;
         }
+        break;
       }
       case "Confirm Password": {
         if (!value[1]) {
           return `${fieldName} is required`;
         } else if (value[0] !== value[1]) {
           return `Password does not match`;
-        } else {
-          return null;
         }
+        break;
       }
       default: {
-        if (condition && value.length < condition) {
-          return `${fieldName} must contain ${condition} characters`;
-        } else {
-          return null;
+        if (condition.min && value.length < condition.min) {
+          return `${fieldName} must contain ${condition.min} characters`;
+        } else if (condition.equal && value.length !== condition.equal) {
+          return `${fieldName} must contain ${condition.equal} characters only`;
         }
       }
     }
+    return null;
   }
 };

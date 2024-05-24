@@ -63,11 +63,11 @@ export const useRegister = () => {
           userData.confirmPassword,
         ]);
       } else {
-        const minChar = fieldName === "mobileNo" ? 10 : 4;
+        const condition = fieldName === "mobileNo" ? { equal: 10 } : { min: 4 };
         errorMessage[fieldName] = authenticate(
           fieldName,
           userData[fieldName]?.toString(),
-          minChar
+          condition
         );
       }
     }
