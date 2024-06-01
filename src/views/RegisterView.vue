@@ -15,8 +15,11 @@
     <form
       class="flex flex-col gap-6 w-[95%] md:w-[50%] sm:w-[80%] items-center justify-center mx-auto my-12 border border-[3px] border-darkBg rounded-xl py-8 md:py-0 md:border-none"
     >
-      <h1 class="text-3xl font-bold text-center text">REGISTER</h1>
+      <h1 class="text-3xl font-bold text-center text">
+        <span v-if="onLoginPage">LOGIN</span><span v-else>REGISTER</span>
+      </h1>
       <div
+        v-if="!onLoginPage"
         class="flex flex-col gap-4 items-center w-[80%] sm:w-[70%] md:w-[50%]"
       >
         <div class="w-[100%]">
@@ -102,7 +105,6 @@
               />
             </div>
           </div>
-
           <p class="text-[red] mt-2">{{ errorMessage.password }}</p>
         </div>
         <div class="w-[100%] relative">
@@ -132,6 +134,47 @@
           <p class="text-[red] mt-2">{{ errorMessage.confirmPassword }}</p>
         </div>
       </div>
+      <div
+        v-else
+        class="flex flex-col gap-4 items-center w-[80%] sm:w-[70%] md:w-[50%]"
+      >
+        <div class="w-[100%]">
+          <input
+            class="rounded p-3 bg-lightBg w-[100%]"
+            type="text"
+            placeholder="Email"
+            v-model="userData.email"
+            @input="validate('email')"
+          />
+          <p class="text-[red] mt-2">{{ errorMessage.email }}</p>
+        </div>
+        <div class="w-[100%] relative">
+          <div class="flex items-center">
+            <input
+              class="rounded p-3 bg-lightBg w-[100%] pr-[15%]"
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="Password"
+              v-model="userData.password"
+              @input="validate('password')"
+            />
+            <div class="absolute right-[5%] cursor-pointer">
+              <Icon
+                icon="mdi:eye-outline"
+                class="text-black"
+                v-if="showPassword"
+                @click="togglePassword"
+              />
+              <Icon
+                v-else
+                icon="mdi:eye-off-outline"
+                class="text-black cursor-pointer"
+                @click="togglePassword"
+              />
+            </div>
+          </div>
+          <p class="text-[red] mt-2">{{ errorMessage.password }}</p>
+        </div>
+      </div>
       <div class="w-[50%]">
         <p v-if="error" class="text-[red] mb-2">{{ error }}</p>
         <button
@@ -143,11 +186,28 @@
           :disabled="loading"
         >
           <span v-if="loading"> <spinning-loader v-if="loading" /></span>
-          <span v-else>REGISTER</span>
+          <span v-else
+            ><span v-if="onLoginPage">LOGIN</span
+            ><span v-else>REGISTER</span></span
+          >
         </button>
+        <p v-if="onLoginPage" class="mt-4">
+          Don't have an account?
+          <RouterLink class="text-darkBg" to="/register">Register</RouterLink>
+        </p>
+        <p v-else class="mt-4">
+          Already have an account?
+          <RouterLink class="text-darkBg" to="/login">Login</RouterLink>
+        </p>
       </div>
     </form>
-    <confirmation-modal v-if="showConfirmationModal" @on-confirm-button="closeConfirmationModal" title="congratulations" description="User is created successfully !!!" confirm-button-text="OK"/>
+    <confirmation-modal
+      v-if="showConfirmationModal"
+      @on-confirm-button="closeConfirmationModal"
+      title="congratulations"
+      description="User is created successfully !!!"
+      confirm-button-text="OK"
+    />
   </div>
 </template>
 
@@ -159,10 +219,18 @@ import { useRegister } from "@/composables/register";
 import { useAuthStore } from "@/stores/authStore";
 import SpinningLoader from "@/components/SpinningLoader.vue";
 import { useShowPassword } from "@/composables/showPassword";
-import ConfirmationModal from "@/components/ConfirmationModal.vue"
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
-const { userData, uploadImage, registerUser, errorMessage, validate, showConfirmationModal, closeConfirmationModal } =
-  useRegister();
+const {
+  userData,
+  uploadImage,
+  registerUser,
+  errorMessage,
+  validate,
+  showConfirmationModal,
+  closeConfirmationModal,
+  onLoginPage,
+} = useRegister();
 
 const {
   showPassword,

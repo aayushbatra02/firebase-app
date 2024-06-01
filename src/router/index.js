@@ -15,6 +15,11 @@ const routes = [
     component: () => import("../views/RegisterView.vue"),
   },
   {
+    path: "/login",
+    name: "login",
+    component: () => import("../views/RegisterView.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "notFound",
     component: NotFoundView,
@@ -41,9 +46,9 @@ const getCurrentUser = () => {
 
 router.beforeEach(async (to, from, next) => {
   const user = await getCurrentUser();
-  if (to.name !== "register" && !user) {
-    next({ name: "register" });
-  } else if (to.name === "register" && user) {
+  if (!user && to.name !== "login" && to.name !== "register") {
+    next({ name: "login" });
+  } else if (user && (to.name === "login" || to.name === "register")) {
     next({ name: "home" });
   } else {
     next();

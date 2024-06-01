@@ -1,7 +1,8 @@
 import { useAuthStore } from "@/stores/authStore";
 import { authenticate } from "@/utils/authenticate";
 import { storeToRefs } from "pinia";
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
 export const useRegister = () => {
   const { handleRegister } = useAuthStore();
@@ -26,6 +27,8 @@ export const useRegister = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const onLoginPage = ref(false);
 
   const validateForm = ref(false);
   const showConfirmationModal = ref(false);
@@ -66,7 +69,7 @@ export const useRegister = () => {
     return isPresent;
   };
 
-  const registerUser = async() => {
+  const registerUser = async () => {
     validateForm.value = true;
     for (let key in errorMessage) {
       validate(key);
@@ -85,6 +88,14 @@ export const useRegister = () => {
       userData[key] = null;
     }
   };
+  const route = useRoute();
+  watch(
+    () => route.path,
+    (newPath) => {
+      onLoginPage.value = newPath === "/login";
+    },
+    { immediate: true }
+  );
   return {
     userData,
     uploadImage,
@@ -93,5 +104,6 @@ export const useRegister = () => {
     validate,
     showConfirmationModal,
     closeConfirmationModal,
+    onLoginPage,
   };
 };
