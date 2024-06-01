@@ -22,7 +22,6 @@ export const useAuthStore = defineStore("authStore", () => {
         userData.password
       );
       state.user = userCredential.user;
-      console.log(state.user)
       await createUserInFireStore(userData, state.user.uid);
       router.push("/");
     } catch (error) {
