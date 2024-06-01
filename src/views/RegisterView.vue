@@ -57,7 +57,7 @@
                 type="file"
                 @change="uploadImage"
                 class="mt-4 w-[15rem]"
-                accept="profilePhoto/*"
+                accept="image/*"
               />
             </div>
             <img
@@ -139,7 +139,7 @@
           :class="[
             loading ? 'cursor-not-allowed' : 'hover:bg-white hover:text-darkBg',
           ]"
-          @click="registerUser"
+          @click.prevent="registerUser"
           :disabled="loading"
         >
           <span v-if="loading"> <spinning-loader v-if="loading" /></span>
