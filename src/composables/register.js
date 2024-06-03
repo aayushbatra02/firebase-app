@@ -20,7 +20,7 @@ export const useRegister = () => {
     profilePhoto: null,
   });
 
-  const errorMessage = reactive({
+  const signupErrorMessage = reactive({
     firstName: "",
     lastName: "",
     mobileNo: "",
@@ -32,7 +32,7 @@ export const useRegister = () => {
 
   const onLoginPage = ref(false);
 
-  const validateForm = ref(false);
+  const validateSignupForm = ref(false);
   const showConfirmationModal = ref(false);
 
   const uploadImage = (e) => {
@@ -43,21 +43,21 @@ export const useRegister = () => {
       userData.imageUrl = URL.createObjectURL(profilePhoto);
       validate("profilePhoto");
     } else {
-      errorMessage.profilePhoto = "Please Select Image Only";
+      signupErrorMessage.profilePhoto = "Please Select Image Only";
     }
   };
 
   const validate = (fieldName) => {
     error.value = false;
-    if (validateForm.value) {
+    if (validateSignupForm.value) {
       if (fieldName === "confirmPassword") {
-        errorMessage[fieldName] = authenticate(fieldName, [
+        signupErrorMessage[fieldName] = authenticate(fieldName, [
           userData.password,
           userData.confirmPassword,
         ]);
       } else {
         const condition = fieldName === "mobileNo" ? { equal: 10 } : { min: 4 };
-        errorMessage[fieldName] = authenticate(
+        signupErrorMessage[fieldName] = authenticate(
           fieldName,
           userData[fieldName]?.toString(),
           condition
@@ -66,27 +66,31 @@ export const useRegister = () => {
     }
   };
 
-  const isErrorPresent = (errorMessage) => {
+  const isErrorPresent = (signupErrorMessage) => {
     let isPresent = false;
-    for (let key in errorMessage) {
-      if (errorMessage[key]) {
+    for (let key in signupErrorMessage) {
+      if (signupErrorMessage[key]) {
         isPresent = true;
       }
     }
     return isPresent;
   };
 
+  const clearData = (obj) => {
+    for (let key in obj) {
+      obj[key] = null;
+    }
+  };
+
   const registerUser = async () => {
-    validateForm.value = true;
-    for (let key in errorMessage) {
+    validateSignupForm.value = true;
+    for (let key in signupErrorMessage) {
       validate(key);
     }
-    if (!isErrorPresent(errorMessage)) {
+    if (!isErrorPresent(signupErrorMessage)) {
       await handleRegister(userData);
       if (!error.value) {
-        for (let key in userData) {
-          userData[key] = null;
-        }
+        clearData(userData);
         showConfirmationModal.value = true;
       }
     }
@@ -106,20 +110,19 @@ export const useRegister = () => {
     { immediate: true }
   );
   const handleMobileInput = () => {
-    userData.mobileNo = userData.mobileNo.replace(/\D/g, '')
-    validate('mobileNo')
-  }
-
+    userData.mobileNo = userData.mobileNo.replace(/\D/g, "");
+    validate("mobileNo");
+  };
 
   return {
     userData,
     uploadImage,
     registerUser,
-    errorMessage,
+    signupErrorMessage,
     validate,
     showConfirmationModal,
     closeConfirmationModal,
     onLoginPage,
-    handleMobileInput
+    handleMobileInput,
   };
 };

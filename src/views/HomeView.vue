@@ -14,6 +14,6 @@ import { signOut } from "firebase/auth";
 
 const handleSignout = () => {
   signOut(auth);
-  router.push('/register')
+  router.push('/login')
 };
 </script>
