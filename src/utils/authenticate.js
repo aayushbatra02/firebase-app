@@ -11,10 +11,6 @@ const checkPasswordRegex = (password) => {
   return regex.test(password);
 };
 
-const checkPhoneRegex = (mobileNo) => {
-  return mobileNo.match(/^\d{10}$/);
-};
-
 const fromatString = (string) => {
   const words = string.split(/(?=[A-Z])/);
   const capitalizedWords = words.map(
@@ -39,12 +35,6 @@ export const authenticate = (fieldName, value, condition) => {
       case "Password": {
         if (!checkPasswordRegex(value) && condition !== "login") {
           return `min 8 letters, at least a special character, upper and lower case letters and a number`;
-        }
-        break;
-      }
-      case "Mobile No": {
-        if (!checkPhoneRegex(value)) {
-          return `Invalid Mobile Number`;
         }
         break;
       }

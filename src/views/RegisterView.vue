@@ -42,10 +42,10 @@
         <div class="w-[100%]">
           <input
             class="rounded p-3 bg-lightBg w-[100%]"
-            type="number"
+            type="text"
             placeholder="Mobile No"
             v-model.trim="userData.mobileNo"
-            @input="validate('mobileNo')"
+            @input="handleMobileInput"
           />
           <p class="text-[red] mt-2">{{ errorMessage.mobileNo }}</p>
         </div>
@@ -147,7 +147,13 @@
         </button>
       </div>
     </form>
-    <confirmation-modal v-if="showConfirmationModal" @on-confirm-button="closeConfirmationModal" title="congratulations" description="User is created successfully !!!" confirm-button-text="OK"/>
+    <confirmation-modal
+      v-if="showConfirmationModal"
+      @on-confirm-button="closeConfirmationModal"
+      title="congratulations"
+      description="User is created successfully !!!"
+      confirm-button-text="OK"
+    />
   </div>
 </template>
 
@@ -159,10 +165,18 @@ import { useRegister } from "@/composables/register";
 import { useAuthStore } from "@/stores/authStore";
 import SpinningLoader from "@/components/SpinningLoader.vue";
 import { useShowPassword } from "@/composables/showPassword";
-import ConfirmationModal from "@/components/ConfirmationModal.vue"
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
-const { userData, uploadImage, registerUser, errorMessage, validate, showConfirmationModal, closeConfirmationModal } =
-  useRegister();
+const {
+  userData,
+  uploadImage,
+  registerUser,
+  errorMessage,
+  validate,
+  showConfirmationModal,
+  closeConfirmationModal,
+  handleMobileInput,
+} = useRegister();
 
 const {
   showPassword,

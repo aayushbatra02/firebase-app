@@ -93,6 +93,12 @@ export const useRegister = () => {
     router.push("/");
   };
 
+  const handleMobileInput = () => {
+    userData.mobileNo = userData.mobileNo.replace(/\D/g, '')
+    validate('mobileNo')
+  }
+
+
   return {
     userData,
     uploadImage,
@@ -101,5 +107,6 @@ export const useRegister = () => {
     validate,
     showConfirmationModal,
     closeConfirmationModal,
+    handleMobileInput
   };
 };
