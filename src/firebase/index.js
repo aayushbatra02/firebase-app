@@ -18,7 +18,6 @@ const firebaseapp = initializeApp(firebaseConfig);
 
 const db = getFirestore(firebaseapp);
 
-const todoRef = collection(db, "testCollection");
 const usersRef = collection(db, "users");
 
 const auth = getAuth();
