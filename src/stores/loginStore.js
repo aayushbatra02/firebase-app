@@ -22,13 +22,18 @@ export const useLoginStore = defineStore("loginStore", () => {
     } catch (error) {
       const errorMessage = error.message;
       const errorCode = error.code;
+      console.log({ errorCode, errorMessage });
       switch (errorCode) {
         case "auth/invalid-credential": {
           state.error = "Invalid Credential";
           break;
         }
+        case "auth/too-many-requests": {
+          state.error = "You have tried many times. Please try again later!!!";
+          break;
+        }
         default: {
-          state.error = errorMessage;
+          state.error = errorCode;
           break;
         }
       }

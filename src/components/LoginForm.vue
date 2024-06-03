@@ -10,7 +10,7 @@
           class="rounded p-3 bg-lightBg w-[100%]"
           type="text"
           placeholder="Email"
-          v-model="loginData.email"
+          v-model.trim="loginData.email"
           @input="validate('email')"
         />
         <p class="text-[red] mt-2">{{ loginErrorMessage.email }}</p>
@@ -21,7 +21,7 @@
             class="rounded p-3 bg-lightBg w-[100%] pr-[15%]"
             :type="showPassword ? 'text' : 'password'"
             placeholder="Password"
-            v-model="loginData.password"
+            v-model.trim="loginData.password"
             @input="validate('password')"
           />
           <div class="absolute right-[5%] cursor-pointer">
