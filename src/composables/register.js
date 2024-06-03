@@ -31,11 +31,16 @@ export const useRegister = () => {
   const validateForm = ref(false);
   const showConfirmationModal = ref(false);
 
-  const uploadImage = async (e) => {
+  const uploadImage = (e) => {
+    userData.imageUrl = null;
     const profilePhoto = e.target.files[0];
-    userData.profilePhoto = profilePhoto;
-    userData.imageUrl = URL.createObjectURL(profilePhoto);
-    validate("profilePhoto");
+    if (profilePhoto && profilePhoto.type.startsWith("image/")) {
+      userData.profilePhoto = profilePhoto;
+      userData.imageUrl = URL.createObjectURL(profilePhoto);
+      validate("profilePhoto");
+    } else {
+      errorMessage.profilePhoto = "Please Select Image Only";
+    }
   };
 
   const validate = (fieldName) => {
