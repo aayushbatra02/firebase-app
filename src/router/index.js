@@ -48,7 +48,10 @@ router.beforeEach(async (to, from, next) => {
   const user = await getCurrentUser();
   if (!user && to.name !== "login" && to.name !== "register") {
     next({ name: "login" });
-  } else if (user && (to.name === "login" || to.name === "register")) {
+  } else if (
+    user &&
+    (to.name === "login" || to.name === "register")
+  ) {
     next({ name: "home" });
   } else {
     next();

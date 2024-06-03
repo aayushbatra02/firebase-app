@@ -1,3 +1,4 @@
+import router from "@/router";
 import { useAuthStore } from "@/stores/authStore";
 import { authenticate } from "@/utils/authenticate";
 import { storeToRefs } from "pinia";
@@ -7,6 +8,7 @@ import { useRoute } from "vue-router";
 export const useRegister = () => {
   const { handleRegister } = useAuthStore();
   const { error } = storeToRefs(useAuthStore());
+
   const userData = reactive({
     firstName: "",
     lastName: "",
@@ -77,6 +79,9 @@ export const useRegister = () => {
     if (!isErrorPresent(errorMessage)) {
       await handleRegister(userData);
       if (!error.value) {
+        for (let key in userData) {
+          userData[key] = null;
+        }
         showConfirmationModal.value = true;
       }
     }
@@ -84,10 +89,9 @@ export const useRegister = () => {
 
   const closeConfirmationModal = () => {
     showConfirmationModal.value = !showConfirmationModal.value;
-    for (let key in userData) {
-      userData[key] = null;
-    }
+    router.push("/");
   };
+
   const route = useRoute();
   watch(
     () => route.path,
