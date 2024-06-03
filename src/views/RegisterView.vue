@@ -27,7 +27,7 @@
             class="rounded p-3 bg-lightBg w-[100%]"
             type="text"
             placeholder="First Name"
-            v-model="userData.firstName"
+            v-model.trim="userData.firstName"
             @input="validate('firstName')"
           />
           <p class="text-[red] mt-2">{{ errorMessage.firstName }}</p>
@@ -37,7 +37,7 @@
             class="rounded p-3 bg-lightBg w-[100%]"
             type="text"
             placeholder="Last Name"
-            v-model="userData.lastName"
+            v-model.trim="userData.lastName"
             @input="validate('lastName')"
           />
           <p class="text-[red] mt-2">{{ errorMessage.lastName }}</p>
@@ -45,10 +45,10 @@
         <div class="w-[100%]">
           <input
             class="rounded p-3 bg-lightBg w-[100%]"
-            type="number"
+            type="text"
             placeholder="Mobile No"
-            v-model="userData.mobileNo"
-            @input="validate('mobileNo')"
+            v-model.trim="userData.mobileNo"
+            @input="handleMobileInput"
           />
           <p class="text-[red] mt-2">{{ errorMessage.mobileNo }}</p>
         </div>
@@ -76,7 +76,7 @@
             class="rounded p-3 bg-lightBg w-[100%]"
             type="text"
             placeholder="Email"
-            v-model="userData.email"
+            v-model.trim="userData.email"
             @input="validate('email')"
           />
           <p class="text-[red] mt-2">{{ errorMessage.email }}</p>
@@ -87,7 +87,7 @@
               class="rounded p-3 bg-lightBg w-[100%] pr-[15%]"
               :type="showPassword ? 'text' : 'password'"
               placeholder="Password"
-              v-model="userData.password"
+              v-model.trim="userData.password"
               @input="validate('password')"
             />
             <div class="absolute right-[5%] cursor-pointer">
@@ -113,7 +113,7 @@
               class="rounded p-3 bg-lightBg w-[100%]"
               :type="showConfirmPassword ? 'text' : 'password'"
               placeholder="Confirm Password"
-              v-model="userData.confirmPassword"
+              v-model.trim="userData.confirmPassword"
               @input="validate('confirmPassword')"
             />
             <div class="absolute right-[5%] cursor-pointer">
@@ -229,7 +229,11 @@ const {
   validate,
   showConfirmationModal,
   closeConfirmationModal,
+<<<<<<< HEAD
   onLoginPage,
+=======
+  handleMobileInput,
+>>>>>>> 2957769838dd01c1262ac2dce1e4873d6689dc9c
 } = useRegister();
 
 const {

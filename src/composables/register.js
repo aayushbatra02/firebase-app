@@ -35,11 +35,16 @@ export const useRegister = () => {
   const validateForm = ref(false);
   const showConfirmationModal = ref(false);
 
-  const uploadImage = async (e) => {
+  const uploadImage = (e) => {
+    userData.imageUrl = null;
     const profilePhoto = e.target.files[0];
-    userData.profilePhoto = profilePhoto;
-    userData.imageUrl = URL.createObjectURL(profilePhoto);
-    validate("profilePhoto");
+    if (profilePhoto && profilePhoto.type.startsWith("image/")) {
+      userData.profilePhoto = profilePhoto;
+      userData.imageUrl = URL.createObjectURL(profilePhoto);
+      validate("profilePhoto");
+    } else {
+      errorMessage.profilePhoto = "Please Select Image Only";
+    }
   };
 
   const validate = (fieldName) => {
@@ -92,6 +97,7 @@ export const useRegister = () => {
     router.push("/");
   };
 
+<<<<<<< HEAD
   const route = useRoute();
   watch(
     () => route.path,
@@ -100,6 +106,14 @@ export const useRegister = () => {
     },
     { immediate: true }
   );
+=======
+  const handleMobileInput = () => {
+    userData.mobileNo = userData.mobileNo.replace(/\D/g, '')
+    validate('mobileNo')
+  }
+
+
+>>>>>>> 2957769838dd01c1262ac2dce1e4873d6689dc9c
   return {
     userData,
     uploadImage,
@@ -108,6 +122,10 @@ export const useRegister = () => {
     validate,
     showConfirmationModal,
     closeConfirmationModal,
+<<<<<<< HEAD
     onLoginPage,
+=======
+    handleMobileInput
+>>>>>>> 2957769838dd01c1262ac2dce1e4873d6689dc9c
   };
 };
