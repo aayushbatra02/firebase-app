@@ -229,11 +229,8 @@ const {
   validate,
   showConfirmationModal,
   closeConfirmationModal,
-<<<<<<< HEAD
   onLoginPage,
-=======
   handleMobileInput,
->>>>>>> 2957769838dd01c1262ac2dce1e4873d6689dc9c
 } = useRegister();
 
 const {

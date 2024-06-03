@@ -97,7 +97,6 @@ export const useRegister = () => {
     router.push("/");
   };
 
-<<<<<<< HEAD
   const route = useRoute();
   watch(
     () => route.path,
@@ -106,14 +105,12 @@ export const useRegister = () => {
     },
     { immediate: true }
   );
-=======
   const handleMobileInput = () => {
     userData.mobileNo = userData.mobileNo.replace(/\D/g, '')
     validate('mobileNo')
   }
 
 
->>>>>>> 2957769838dd01c1262ac2dce1e4873d6689dc9c
   return {
     userData,
     uploadImage,
@@ -122,10 +119,7 @@ export const useRegister = () => {
     validate,
     showConfirmationModal,
     closeConfirmationModal,
-<<<<<<< HEAD
     onLoginPage,
-=======
     handleMobileInput
->>>>>>> 2957769838dd01c1262ac2dce1e4873d6689dc9c
   };
 };
