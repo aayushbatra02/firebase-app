@@ -7,7 +7,7 @@ import { useRoute } from "vue-router";
 
 export const useRegister = () => {
   const { handleRegister } = useAuthStore();
-  const { error } = storeToRefs(useAuthStore());
+  const { error, showConfirmationModal } = storeToRefs(useAuthStore());
 
   const userData = reactive({
     firstName: "",
@@ -33,7 +33,6 @@ export const useRegister = () => {
   const onLoginPage = ref(false);
 
   const validateSignupForm = ref(false);
-  const showConfirmationModal = ref(false);
 
   const uploadImage = (e) => {
     userData.imageUrl = null;
@@ -120,7 +119,6 @@ export const useRegister = () => {
     registerUser,
     signupErrorMessage,
     validate,
-    showConfirmationModal,
     closeConfirmationModal,
     onLoginPage,
     handleMobileInput,

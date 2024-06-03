@@ -30,6 +30,8 @@ import { useRegister } from "@/composables/register";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
 import LoginForm from "@/components/LoginForm.vue";
-const { showConfirmationModal, closeConfirmationModal, onLoginPage } =
-  useRegister();
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/stores/authStore";
+const { closeConfirmationModal, onLoginPage } = useRegister();
+const { showConfirmationModal } = storeToRefs(useAuthStore());
 </script>

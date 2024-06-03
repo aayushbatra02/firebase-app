@@ -10,6 +10,7 @@ export const useAuthStore = defineStore("authStore", () => {
     user: {},
     error: null,
     loading: false,
+    showConfirmationModal: false,
   });
 
   const handleRegister = async (userData) => {

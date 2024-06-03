@@ -20,9 +20,7 @@ export const useLoginStore = defineStore("loginStore", () => {
       );
       router.push("/");
     } catch (error) {
-      const errorMessage = error.message;
       const errorCode = error.code;
-      console.log({ errorCode, errorMessage });
       switch (errorCode) {
         case "auth/invalid-credential": {
           state.error = "Invalid Credential";
