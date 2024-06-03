@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -22,4 +22,17 @@ const usersRef = collection(db, "users");
 const auth = getAuth();
 const storage = getStorage();
 
-export { firebaseapp, auth, usersRef, storage };
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject
+    );
+  });
+};
+
+export { firebaseapp, auth, usersRef, storage, getCurrentUser };

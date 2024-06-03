@@ -1,7 +1,6 @@
-import { auth } from "@/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import { createRouter, createWebHashHistory } from "vue-router";
 import NotFoundView from "../views/NotFoundView.vue";
+import { getCurrentUser } from "@/firebase";
 
 const routes = [
   {
@@ -31,21 +30,11 @@ const router = createRouter({
   routes,
 });
 
-const getCurrentUser = () => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (user) => {
-        unsubscribe();
-        resolve(user);
-      },
-      reject
-    );
-  });
-};
+
 
 router.beforeEach(async (to, from, next) => {
   const user = await getCurrentUser();
+  console.log(user)
   if (!user && to.name !== "login" && to.name !== "register") {
     next({ name: "login" });
   } else if (
