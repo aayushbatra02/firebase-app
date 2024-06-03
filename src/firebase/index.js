@@ -13,7 +13,6 @@ const firebaseConfig = {
   measurementId: process.env.VUE_APP_MEASURMENT_ID,
 };
 
-
 const firebaseapp = initializeApp(firebaseConfig);
 
 const db = getFirestore(firebaseapp);
@@ -23,4 +22,4 @@ const usersRef = collection(db, "users");
 const auth = getAuth();
 const storage = getStorage();
 
-export { todoRef, firebaseapp, auth, usersRef, storage };
+export { firebaseapp, auth, usersRef, storage };
