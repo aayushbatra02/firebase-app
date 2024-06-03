@@ -2,7 +2,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { auth, usersRef, storage } from "@/firebase";
-import router from "@/router";
 import { addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -23,7 +22,6 @@ export const useAuthStore = defineStore("authStore", () => {
       );
       state.user = userCredential.user;
       await createUserInFireStore(userData, state.user.uid);
-      router.push("/");
     } catch (error) {
       if (error.message.includes("email-already-in-use")) {
         state.error = "Email already in use !";
