@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -35,4 +41,23 @@ const getCurrentUser = () => {
   });
 };
 
-export { firebaseapp, auth, usersRef, storage, getCurrentUser };
+async function getUserByUID(uid) {
+  const q = query(usersRef, where("uid", "==", uid));
+  let user = {};
+  try {
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach((doc) => {
+        user = doc.data();
+      });
+      return user;
+    } else {
+      console.log("No user found with the specified UID");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+}
+
+export { firebaseapp, auth, usersRef, storage, getCurrentUser, getUserByUID };

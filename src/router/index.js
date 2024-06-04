@@ -34,7 +34,6 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const user = await getCurrentUser();
-  console.log(user)
   if (!user && to.name !== "login" && to.name !== "register") {
     next({ name: "login" });
   } else if (
