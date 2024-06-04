@@ -53,7 +53,7 @@ async function getUserByUID(uid) {
       return user;
     } else {
       console.log("No user found with the specified UID");
-      return null;
+      return {};
     }
   } catch (error) {
     console.error("Error fetching user data:", error);
