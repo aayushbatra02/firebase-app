@@ -1,8 +1,8 @@
-import { auth } from "@/firebase";
-import router from "@/router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
+import { auth } from "@/firebase";
+import router from "@/router";
 
 export const useLoginStore = defineStore("loginStore", () => {
   const state = reactive({

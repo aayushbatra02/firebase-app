@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import NotFoundView from "../views/NotFoundView.vue";
-import { useLogin } from "@/composables/login";
+import { useUser } from "@/composables/user";
+
 const routes = [
   {
     path: "/",
@@ -30,7 +31,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const { getCurrentUser } = useLogin();
+  const { getCurrentUser } = useUser();
   const user = await getCurrentUser();
   if (!user && to.name !== "login" && to.name !== "register") {
     next({ name: "login" });

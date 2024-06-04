@@ -1,9 +1,10 @@
-import router from "@/router";
-import { useAuthStore } from "@/stores/authStore";
-import { authenticate } from "@/utils/authenticate";
 import { storeToRefs } from "pinia";
 import { reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import router from "@/router";
+import { useAuthStore } from "@/stores/authStore";
+import { authenticate } from "@/utils/authenticate";
+
 
 export const useRegister = () => {
   const { handleRegister } = useAuthStore();

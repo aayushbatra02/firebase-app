@@ -120,18 +120,7 @@
     </div>
     <div class="w-[50%]">
       <p v-if="error" class="text-[red] mb-2">{{ error }}</p>
-      <button
-        class="bg-darkBg border-2 border-darkBg text-[white] py-3 rounded-lg w-[100%] text-lg h-16"
-        :class="[
-          loading ? 'cursor-not-allowed' : 'hover:bg-white hover:text-darkBg',
-        ]"
-        @click.prevent="registerUser"
-        :disabled="loading"
-      >
-        <span v-if="loading"><spinning-loader /></span>
-        <span v-else>REGISTER</span>
-      </button>
-
+      <form-button buttonText="register" @onSubmit="registerUser" :loading="loading"/>
       <p class="mt-4">
         Already have an account?
         <RouterLink class="text-darkBg" to="/login">Login</RouterLink>
@@ -142,19 +131,18 @@
 
 <script setup>
 import { Icon } from "@iconify/vue";
-import SpinningLoader from "@/components/SpinningLoader.vue";
+import { storeToRefs } from "pinia";
 import { useRegister } from "@/composables/register";
 import { useShowPassword } from "@/composables/showPassword";
-import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/authStore";
-
+import FormButton from "@/components/FormButton.vue";
 const {
   userData,
   uploadImage,
-  registerUser,
   signupErrorMessage,
   validate,
   handleMobileInput,
+  registerUser,
 } = useRegister();
 
 const {

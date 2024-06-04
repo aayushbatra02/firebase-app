@@ -38,15 +38,16 @@
 </template>
 
 <script setup>
-import { useLogin } from "@/composables/login";
-import { auth } from "@/firebase";
-import router from "@/router";
 import { signOut } from "firebase/auth";
 import { onMounted, ref } from "vue";
+import { auth } from "@/firebase";
+import router from "@/router";
+import { useUser } from "@/composables/user";
+
 
 const userDetails = ref({});
 const loading = ref(false);
-const { getCurrentUser, getUserByUID } = useLogin();
+const { getCurrentUser, getUserByUID } = useUser();
 
 const handleSignout = () => {
   signOut(auth);

@@ -1,6 +1,6 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, usersRef, storage } from "@/firebase";
 import { addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";

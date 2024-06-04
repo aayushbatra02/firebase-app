@@ -44,17 +44,7 @@
     </div>
     <div class="w-[50%]">
       <p v-if="error" class="text-[red] mb-2">{{ error }}</p>
-      <button
-        class="bg-darkBg border-2 border-darkBg text-[white] py-3 rounded-lg w-[100%] text-lg h-16"
-        :class="[
-          loading ? 'cursor-not-allowed' : 'hover:bg-white hover:text-darkBg',
-        ]"
-        :disabled="loading"
-        @click.prevent="loginUser"
-      >
-        <span v-if="loading"> <spinning-loader v-if="loading" /></span>
-        <span v-else>LOGIN</span>
-      </button>
+      <form-button buttonText="login" @onSubmit="loginUser" :loading="loading"/>
       <p class="mt-4">
         Don't have an account?
         <RouterLink class="text-darkBg" to="/register">Register</RouterLink>
@@ -65,15 +55,14 @@
 
 <script setup>
 import { Icon } from "@iconify/vue";
-import SpinningLoader from "@/components/SpinningLoader.vue";
+import { storeToRefs } from "pinia";
 import { useLogin } from "@/composables/login";
 import { useShowPassword } from "@/composables/showPassword";
 import { useLoginStore } from "@/stores/loginStore";
-import { storeToRefs } from "pinia";
-
+import FormButton from "@/components/FormButton.vue";
 const { loginData, loginErrorMessage, loginUser, validate } = useLogin();
 
 const { showPassword, togglePassword } = useShowPassword();
 
-const { loading, error } = storeToRefs(useLoginStore());
+const { error, loading } = storeToRefs(useLoginStore());
 </script>

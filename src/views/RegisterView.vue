@@ -26,11 +26,11 @@
 </template>
 
 <script setup>
+import { storeToRefs } from "pinia";
 import { useRegister } from "@/composables/register";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
 import LoginForm from "@/components/LoginForm.vue";
-import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/authStore";
 const { closeConfirmationModal, onLoginPage } = useRegister();
 const { showConfirmationModal } = storeToRefs(useAuthStore());
