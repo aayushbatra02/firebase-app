@@ -1,8 +1,11 @@
+import { ref } from "vue";
 import { onAuthStateChanged } from "firebase/auth";
 import { getDocs, query, where } from "firebase/firestore";
 import { auth, usersRef } from "@/firebase";
 
 export const useUser = () => {
+  const userDetails = ref({});
+
   const getCurrentUser = () => {
     return new Promise((resolve, reject) => {
       const unsubscribe = onAuthStateChanged(
@@ -16,24 +19,21 @@ export const useUser = () => {
     });
   };
 
-  async function getUserByUID(uid) {
+  const getUserByUID = async (uid) => {
     const q = query(usersRef, where("uid", "==", uid));
-    let user = {};
     try {
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         querySnapshot.forEach((doc) => {
-          user = doc.data();
+          userDetails.value = doc.data();
         });
-        return user;
       } else {
         console.log("No user found with the specified UID");
-        return {};
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
-  }
+  };
 
-  return { getCurrentUser, getUserByUID };
+  return { getCurrentUser, getUserByUID, userDetails };
 };

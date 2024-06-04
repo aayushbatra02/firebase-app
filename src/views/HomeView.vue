@@ -45,9 +45,8 @@ import router from "@/router";
 import { useUser } from "@/composables/user";
 
 
-const userDetails = ref({});
 const loading = ref(false);
-const { getCurrentUser, getUserByUID } = useUser();
+const { getCurrentUser, getUserByUID, userDetails } = useUser();
 
 const handleSignout = () => {
   signOut(auth);
@@ -57,7 +56,7 @@ const handleSignout = () => {
 onMounted(async () => {
   loading.value = true;
   const user = await getCurrentUser();
-  userDetails.value = await getUserByUID(user?.uid);
+  await getUserByUID(user?.uid);
   loading.value = false;
 });
 </script>
