@@ -1,6 +1,6 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, usersRef, storage } from "@/firebase";
 import { addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -10,6 +10,7 @@ export const useAuthStore = defineStore("authStore", () => {
     user: {},
     error: null,
     loading: false,
+    showConfirmationModal: false,
   });
 
   const handleRegister = async (userData) => {
@@ -33,13 +34,10 @@ export const useAuthStore = defineStore("authStore", () => {
     }
   };
 
-  const createUserInFireStore = async ({
-    firstName,
-    lastName,
-    mobileNo,
-    profilePhoto,
-    email,
-  }, uid) => {
+  const createUserInFireStore = async (
+    { firstName, lastName, mobileNo, profilePhoto, email },
+    uid
+  ) => {
     const storageRef = ref(storage, uid);
     const snapshot = await uploadBytes(storageRef, profilePhoto);
     const downloadURL = await getDownloadURL(snapshot.ref);
@@ -50,7 +48,7 @@ export const useAuthStore = defineStore("authStore", () => {
       mobileNo,
       profilePhoto: downloadURL,
       email,
-      uid
+      uid,
     });
   };
 

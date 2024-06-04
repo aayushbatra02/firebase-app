@@ -1,7 +1,6 @@
-import { auth } from "@/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import { createRouter, createWebHashHistory } from "vue-router";
 import NotFoundView from "../views/NotFoundView.vue";
+import { useUser } from "@/composables/user";
 
 const routes = [
   {
@@ -12,6 +11,11 @@ const routes = [
   {
     path: "/register",
     name: "register",
+    component: () => import("../views/RegisterView.vue"),
+  },
+  {
+    path: "/login",
+    name: "login",
     component: () => import("../views/RegisterView.vue"),
   },
   {
@@ -26,24 +30,12 @@ const router = createRouter({
   routes,
 });
 
-const getCurrentUser = () => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (user) => {
-        unsubscribe();
-        resolve(user);
-      },
-      reject
-    );
-  });
-};
-
 router.beforeEach(async (to, from, next) => {
+  const { getCurrentUser } = useUser();
   const user = await getCurrentUser();
-  if (to.name !== "register" && !user) {
-    next({ name: "register" });
-  } else if (to.name === "register" && user) {
+  if (!user && to.name !== "login" && to.name !== "register") {
+    next({ name: "login" });
+  } else if (user && (to.name === "login" || to.name === "register")) {
     next({ name: "home" });
   } else {
     next();
