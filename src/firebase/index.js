@@ -1,11 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import {
   collection,
-  getDocs,
   getFirestore,
-  query,
-  where,
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -28,36 +25,4 @@ const usersRef = collection(db, "users");
 const auth = getAuth();
 const storage = getStorage();
 
-const getCurrentUser = () => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (user) => {
-        unsubscribe();
-        resolve(user);
-      },
-      reject
-    );
-  });
-};
-
-async function getUserByUID(uid) {
-  const q = query(usersRef, where("uid", "==", uid));
-  let user = {};
-  try {
-    const querySnapshot = await getDocs(q);
-    if (!querySnapshot.empty) {
-      querySnapshot.forEach((doc) => {
-        user = doc.data();
-      });
-      return user;
-    } else {
-      console.log("No user found with the specified UID");
-      return {};
-    }
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-  }
-}
-
-export { firebaseapp, auth, usersRef, storage, getCurrentUser, getUserByUID };
+export { firebaseapp, auth, usersRef, storage };

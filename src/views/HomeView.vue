@@ -38,13 +38,15 @@
 </template>
 
 <script setup>
-import { auth, getCurrentUser, getUserByUID } from "@/firebase";
+import { useLogin } from "@/composables/login";
+import { auth } from "@/firebase";
 import router from "@/router";
 import { signOut } from "firebase/auth";
 import { onMounted, ref } from "vue";
 
 const userDetails = ref({});
 const loading = ref(false);
+const { getCurrentUser, getUserByUID } = useLogin();
 
 const handleSignout = () => {
   signOut(auth);
@@ -55,7 +57,6 @@ onMounted(async () => {
   loading.value = true;
   const user = await getCurrentUser();
   userDetails.value = await getUserByUID(user?.uid);
-  console.log(userDetails.value)
   loading.value = false;
 });
 </script>
