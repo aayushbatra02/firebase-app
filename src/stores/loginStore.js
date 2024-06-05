@@ -84,7 +84,8 @@ export const useLoginStore = defineStore("loginStore", () => {
       await createUserInFireStore(userDetails, uid, true);
       router.push("/");
     } catch (e) {
-      state.error = e.errorMessage;
+      state.error = e;
+      console.error(e);
     }
   };
 

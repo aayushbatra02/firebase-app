@@ -55,28 +55,26 @@
       </p>
     </div>
     <div>OR</div>
-    <button
-      @click.prevent="googleSignup"
-      class="border-2 border-darkBg text-darkBg hover:bg-darkBg hover:text-white w-[80%] sm:w-[70%] md:w-[50%] p-4 rounded-lg flex justify-center items-center gap-4 md:text-lg"
-    >
-      <Icon icon="devicon:google" class="w-6 h-6" /><span
-        >Sign up with Google</span
-      >
-    </button>
-    <button
-      @click.prevent="facebookSignup"
-      class="border-2 border-darkBg text-darkBg hover:bg-darkBg hover:text-white w-[80%] sm:w-[70%] md:w-[50%] p-4 rounded-lg flex justify-center items-center gap-4 md:text-lg"
-    >
-      <Icon icon="devicon:facebook" class="w-6 h-6" />
-      <span>Sign up with Facebook</span>
-    </button>
-    <button
-      @click.prevent="twitterSignup"
-      class="border-2 border-darkBg text-darkBg hover:bg-darkBg hover:text-white w-[80%] sm:w-[70%] md:w-[50%] p-4 rounded-lg flex justify-center items-center gap-4 md:text-lg"
-    >
-      <Icon icon="devicon:twitter" class="w-6 h-6" />
-      <span>Sign up with Twitter</span>
-    </button>
+    <div class="w-[80%] sm:w-[70%] md:w-[50%] flex flex-col gap-4">
+      <form-button
+        buttonText="Google Signup"
+        @onSubmit="googleSignup"
+        :loading="false"
+        iconName="devicon:google"
+      />
+      <form-button
+        buttonText="Facebook Signup"
+        @onSubmit="facebookSignup"
+        :loading="false"
+        iconName="devicon:facebook"
+      />
+      <form-button
+        buttonText="Twitter Signup"
+        @onSubmit="twitterSignup"
+        :loading="false"
+        iconName="devicon:twitter"
+      />
+    </div>
   </form>
 </template>
 
@@ -92,5 +90,6 @@ const { loginData, loginErrorMessage, loginUser, validate } = useLogin();
 const { showPassword, togglePassword } = useShowPassword();
 
 const { error, loading } = storeToRefs(useLoginStore());
+console.log(loading)
 const { googleSignup, facebookSignup, twitterSignup } = useLoginStore();
 </script>
