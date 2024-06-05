@@ -1,8 +1,16 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  TwitterAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { useAuthStore } from "./authStore";
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { auth } from "@/firebase";
 import router from "@/router";
+import { FACEBOOK_PROVIDER_TYPE, GOOGLE_PROVIDER_TYPE, TWITTER_PROVIDER_TYPE } from "@/contants";
 
 export const useLoginStore = defineStore("loginStore", () => {
   const state = reactive({
@@ -40,5 +48,61 @@ export const useLoginStore = defineStore("loginStore", () => {
     }
   };
 
-  return { handleLogin, ...toRefs(state) };
+  const socialSignup = async (providerType) => {
+    let provider = null;
+    switch (providerType) {
+      case GOOGLE_PROVIDER_TYPE: {
+        provider = new GoogleAuthProvider();
+        break;
+      }
+      case FACEBOOK_PROVIDER_TYPE: {
+        provider = new FacebookAuthProvider();
+        break;
+      }
+      case TWITTER_PROVIDER_TYPE: {
+        provider = new TwitterAuthProvider();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    await signupWithFirebase(provider);
+  };
+
+  const signupWithFirebase = async (provider) => {
+    try {
+      const { createUserInFireStore } = useAuthStore();
+      const res = await signInWithPopup(auth, provider);
+      const user = res.user;
+      const {
+        displayName,
+        email,
+        photoURL: profilePhoto,
+        phoneNumber: mobileNo,
+        uid,
+      } = user;
+      const [firstName, lastName] = displayName.split(" ");
+      const userDetails = {
+        firstName,
+        lastName,
+        mobileNo,
+        profilePhoto,
+        email,
+      };
+      await createUserInFireStore(userDetails, uid, true);
+      router.push("/");
+    } catch (e) {
+      if (e.message.includes("auth/account-exists-with-different-credential")) {
+        state.error = `account exists with different credential`;
+      }
+      console.error(e.message);
+    }
+  };
+
+  return {
+    handleLogin,
+    socialSignup,
+    ...toRefs(state),
+  };
 });

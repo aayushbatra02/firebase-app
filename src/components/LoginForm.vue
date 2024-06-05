@@ -42,13 +42,28 @@
         <p class="text-[red] mt-2">{{ loginErrorMessage.password }}</p>
       </div>
     </div>
-    <div class="w-[50%]">
+    <div class="w-[80%] sm:w-[70%] md:w-[50%]">
       <p v-if="error" class="text-[red] mb-2">{{ error }}</p>
-      <form-button buttonText="login" @onSubmit="loginUser" :loading="loading"/>
+      <form-button
+        buttonText="login"
+        @onSubmit="loginUser"
+        :loading="loading"
+      />
       <p class="mt-4">
         Don't have an account?
         <RouterLink class="text-darkBg" to="/register">Register</RouterLink>
       </p>
+    </div>
+    <div>OR</div>
+    <div class="w-[80%] sm:w-[70%] md:w-[50%] flex flex-col gap-4">
+      <form-button
+        v-for="({ buttonText, iconName, providerType }, i) in socialAuths"
+        :key="i"
+        :buttonText="buttonText"
+        @onSubmit="socialSignup(providerType)"
+        :loading="false"
+        :iconName="iconName"
+      />
     </div>
   </form>
 </template>
@@ -60,9 +75,28 @@ import { useLogin } from "@/composables/login";
 import { useShowPassword } from "@/composables/showPassword";
 import { useLoginStore } from "@/stores/loginStore";
 import FormButton from "@/components/FormButton.vue";
+import { FACEBOOK_PROVIDER_TYPE, GOOGLE_PROVIDER_TYPE, TWITTER_PROVIDER_TYPE } from "@/contants";
 const { loginData, loginErrorMessage, loginUser, validate } = useLogin();
 
 const { showPassword, togglePassword } = useShowPassword();
 
 const { error, loading } = storeToRefs(useLoginStore());
+const { socialSignup } = useLoginStore();
+const socialAuths = [
+  {
+    buttonText: "Google Signup",
+    iconName: "devicon:google",
+    providerType: GOOGLE_PROVIDER_TYPE,
+  },
+  {
+    buttonText: "Facebook Signup",
+    iconName: "devicon:facebook",
+    providerType: FACEBOOK_PROVIDER_TYPE,
+  },
+  {
+    buttonText: "Twitter Signup",
+    iconName: "devicon:twitter",
+    providerType: TWITTER_PROVIDER_TYPE,
+  },
+];
 </script>

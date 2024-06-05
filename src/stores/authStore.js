@@ -36,11 +36,15 @@ export const useAuthStore = defineStore("authStore", () => {
 
   const createUserInFireStore = async (
     { firstName, lastName, mobileNo, profilePhoto, email },
-    uid
+    uid,
+    socialAuth
   ) => {
     const storageRef = ref(storage, uid);
     const snapshot = await uploadBytes(storageRef, profilePhoto);
-    const downloadURL = await getDownloadURL(snapshot.ref);
+
+    const downloadURL = socialAuth
+      ? profilePhoto
+      : await getDownloadURL(snapshot.ref);
 
     addDoc(usersRef, {
       firstName,
@@ -52,5 +56,5 @@ export const useAuthStore = defineStore("authStore", () => {
     });
   };
 
-  return { handleRegister, ...toRefs(state) };
+  return { handleRegister, createUserInFireStore, ...toRefs(state) };
 });
