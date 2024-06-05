@@ -46,22 +46,30 @@ export const useLoginStore = defineStore("loginStore", () => {
       state.loading = false;
     }
   };
-  const googleSignup = async () => {
-    const provider = new GoogleAuthProvider();
-    await socialSignup(provider);
+
+  const socialSignup = async (buttonText) => {
+    let provider = null;
+    switch (buttonText) {
+      case "Google Signup": {
+        provider = new GoogleAuthProvider();
+        break;
+      }
+      case "Facebook Signup": {
+        provider = new FacebookAuthProvider();
+        break;
+      }
+      case "Twitter Signup": {
+        provider = new TwitterAuthProvider();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    await signupWithFirebase(provider);
   };
 
-  const facebookSignup = async () => {
-    const provider = new FacebookAuthProvider();
-    await socialSignup(provider);
-  };
-
-  const twitterSignup = async () => {
-    const provider = new TwitterAuthProvider();
-    await socialSignup(provider);
-  };
-
-  const socialSignup = async (provider) => {
+  const signupWithFirebase = async (provider) => {
     try {
       const { createUserInFireStore } = useAuthStore();
       const res = await signInWithPopup(auth, provider);
@@ -84,16 +92,13 @@ export const useLoginStore = defineStore("loginStore", () => {
       await createUserInFireStore(userDetails, uid, true);
       router.push("/");
     } catch (e) {
-      state.error = e;
       console.error(e);
     }
   };
 
   return {
     handleLogin,
-    googleSignup,
-    facebookSignup,
-    twitterSignup,
+    socialSignup,
     ...toRefs(state),
   };
 });

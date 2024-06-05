@@ -57,22 +57,12 @@
     <div>OR</div>
     <div class="w-[80%] sm:w-[70%] md:w-[50%] flex flex-col gap-4">
       <form-button
-        buttonText="Google Signup"
-        @onSubmit="googleSignup"
+        v-for="({ buttonText, iconName }, i) in socialAuths"
+        :key="i"
+        :buttonText="buttonText"
+        @onSubmit="socialSignup(buttonText)"
         :loading="false"
-        iconName="devicon:google"
-      />
-      <form-button
-        buttonText="Facebook Signup"
-        @onSubmit="facebookSignup"
-        :loading="false"
-        iconName="devicon:facebook"
-      />
-      <form-button
-        buttonText="Twitter Signup"
-        @onSubmit="twitterSignup"
-        :loading="false"
-        iconName="devicon:twitter"
+        :iconName="iconName"
       />
     </div>
   </form>
@@ -90,6 +80,10 @@ const { loginData, loginErrorMessage, loginUser, validate } = useLogin();
 const { showPassword, togglePassword } = useShowPassword();
 
 const { error, loading } = storeToRefs(useLoginStore());
-console.log(loading)
-const { googleSignup, facebookSignup, twitterSignup } = useLoginStore();
+const { socialSignup } = useLoginStore();
+const socialAuths = [
+  { buttonText: "Google Signup", iconName: "devicon:google" },
+  { buttonText: "Facebook Signup", iconName: "devicon:facebook" },
+  { buttonText: "Twitter Signup", iconName: "devicon:twitter" },
+];
 </script>

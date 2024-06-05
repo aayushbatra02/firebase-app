@@ -3,8 +3,8 @@
     class="border-2 border-darkBg py-3 rounded-lg w-[100%] text-lg h-16"
     :class="[
       iconName
-        ? 'bg-white text-darkBg hover:bg-darkBg hover:text-white'
-        : 'bg-darkBg text-white hover:bg-[white] hover:text-darkBg',
+        ? 'bg-white text-darkBg hover:bg-darkBg hover:text-white capitalize'
+        : 'bg-darkBg text-white hover:bg-[white] hover:text-darkBg uppercase',
       loading ? 'cursor-not-allowed hover:bg-darkBg' : '',
     ]"
     @click.prevent="$emit('onSubmit')"
@@ -13,10 +13,9 @@
     <span v-if="loading"><spinning-loader /></span>
     <span
       v-else
-      class="uppercase flex justify-center items-center gap-4"
+      class="flex justify-center items-center gap-4"
       :class="[alignLeft ? 'flex-row-reverse' : '']"
     >
-      {{ console.log(iconName) }}
       <Icon v-if="iconName" :icon="iconName" class="w-6 h-6" />{{
         buttonText
       }}</span
