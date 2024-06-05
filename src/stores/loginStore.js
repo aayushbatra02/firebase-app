@@ -92,7 +92,13 @@ export const useLoginStore = defineStore("loginStore", () => {
       await createUserInFireStore(userDetails, uid, true);
       router.push("/");
     } catch (e) {
-      console.error(e);
+      if (e.message.includes("auth/account-exists-with-different-credential")) {
+        state.error = `account exists with different credential`;
+      }
+      console.error(
+        e.message,
+        e.message.includes("auth/account-exists-with-different-credential")
+      );
     }
   };
 
