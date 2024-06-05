@@ -42,14 +42,41 @@
         <p class="text-[red] mt-2">{{ loginErrorMessage.password }}</p>
       </div>
     </div>
-    <div class="w-[50%]">
+    <div class="w-[80%] sm:w-[70%] md:w-[50%]">
       <p v-if="error" class="text-[red] mb-2">{{ error }}</p>
-      <form-button buttonText="login" @onSubmit="loginUser" :loading="loading"/>
+      <form-button
+        buttonText="login"
+        @onSubmit="loginUser"
+        :loading="loading"
+      />
       <p class="mt-4">
         Don't have an account?
         <RouterLink class="text-darkBg" to="/register">Register</RouterLink>
       </p>
     </div>
+    <div>OR</div>
+    <button
+      @click.prevent="googleSignup"
+      class="border-2 border-darkBg text-darkBg hover:bg-darkBg hover:text-white w-[80%] sm:w-[70%] md:w-[50%] p-4 rounded-lg flex justify-center items-center gap-4 md:text-lg"
+    >
+      <Icon icon="devicon:google" class="w-6 h-6" /><span
+        >Sign up with Google</span
+      >
+    </button>
+    <button
+      @click.prevent="facebookSignup"
+      class="border-2 border-darkBg text-darkBg hover:bg-darkBg hover:text-white w-[80%] sm:w-[70%] md:w-[50%] p-4 rounded-lg flex justify-center items-center gap-4 md:text-lg"
+    >
+      <Icon icon="devicon:facebook" class="w-6 h-6" />
+      <span>Sign up with Facebook</span>
+    </button>
+    <button
+      @click.prevent="twitterSignup"
+      class="border-2 border-darkBg text-darkBg hover:bg-darkBg hover:text-white w-[80%] sm:w-[70%] md:w-[50%] p-4 rounded-lg flex justify-center items-center gap-4 md:text-lg"
+    >
+      <Icon icon="devicon:twitter" class="w-6 h-6" />
+      <span>Sign up with Twitter</span>
+    </button>
   </form>
 </template>
 
@@ -65,4 +92,5 @@ const { loginData, loginErrorMessage, loginUser, validate } = useLogin();
 const { showPassword, togglePassword } = useShowPassword();
 
 const { error, loading } = storeToRefs(useLoginStore());
+const { googleSignup, facebookSignup, twitterSignup } = useLoginStore();
 </script>

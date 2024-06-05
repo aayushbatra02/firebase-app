@@ -14,24 +14,26 @@
     >
       <div>
         <label class="font-bold inline-block w-[8rem]">NAME</label
-        >{{ userDetails?.firstName }}
+        >{{ userDetails?.firstName ? userDetails?.firstName : "NA" }}
         {{ userDetails?.lastName }}
       </div>
       <div>
         <label class="font-bold inline-block w-[8rem]">EMAIL</label>
-        {{ userDetails?.email }}
+        {{ userDetails?.email ? userDetails?.email : "NA" }}
       </div>
       <div>
         <label class="font-bold inline-block w-[8rem]">Mobile No</label>
-        {{ userDetails?.mobileNo }}
+        {{ userDetails?.mobileNo ? userDetails?.mobileNo : "NA" }}
       </div>
       <div class="flex items-center">
         <label class="font-bold inline-block w-[8rem]">Profile Pic</label>
         <img
+          v-if="userDetails?.profilePhoto"
           :src="userDetails?.profilePhoto"
           alt="profile pic"
           class="w-16 h-16 rounded-[50%] object-cover"
         />
+        <div v-else>NA</div>
       </div>
     </div>
   </div>
@@ -43,7 +45,6 @@ import { onMounted, ref } from "vue";
 import { auth } from "@/firebase";
 import router from "@/router";
 import { useUser } from "@/composables/user";
-
 
 const loading = ref(false);
 const { getCurrentUser, getUserByUID, userDetails } = useUser();

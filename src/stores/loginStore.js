@@ -1,4 +1,11 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  TwitterAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { useAuthStore } from "./authStore";
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { auth } from "@/firebase";
@@ -39,6 +46,53 @@ export const useLoginStore = defineStore("loginStore", () => {
       state.loading = false;
     }
   };
+  const googleSignup = async () => {
+    const provider = new GoogleAuthProvider();
+    await socialSignup(provider);
+  };
 
-  return { handleLogin, ...toRefs(state) };
+  const facebookSignup = async () => {
+    const provider = new FacebookAuthProvider();
+    await socialSignup(provider);
+  };
+
+  const twitterSignup = async () => {
+    const provider = new TwitterAuthProvider();
+    await socialSignup(provider);
+  };
+
+  const socialSignup = async (provider) => {
+    try {
+      const { createUserInFireStore } = useAuthStore();
+      const res = await signInWithPopup(auth, provider);
+      const user = res.user;
+      const {
+        displayName,
+        email,
+        photoURL: profilePhoto,
+        phoneNumber: mobileNo,
+        uid,
+      } = user;
+      const [firstName, lastName] = displayName.split(" ");
+      const userDetails = {
+        firstName,
+        lastName,
+        mobileNo,
+        profilePhoto,
+        email,
+      };
+      await createUserInFireStore(userDetails, uid, true);
+      router.push("/");
+    } catch (e) {
+      state.error = e.errorMessage;
+    }
+  };
+
+  return {
+    handleLogin,
+    googleSignup,
+    facebookSignup,
+    twitterSignup,
+    ...toRefs(state),
+  };
 });
