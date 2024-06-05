@@ -10,6 +10,7 @@ import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { auth } from "@/firebase";
 import router from "@/router";
+import { FACEBOOK_PROVIDER_TYPE, GOOGLE_PROVIDER_TYPE, TWITTER_PROVIDER_TYPE } from "@/contants";
 
 export const useLoginStore = defineStore("loginStore", () => {
   const state = reactive({
@@ -47,18 +48,18 @@ export const useLoginStore = defineStore("loginStore", () => {
     }
   };
 
-  const socialSignup = async (buttonText) => {
+  const socialSignup = async (providerType) => {
     let provider = null;
-    switch (buttonText) {
-      case "Google Signup": {
+    switch (providerType) {
+      case GOOGLE_PROVIDER_TYPE: {
         provider = new GoogleAuthProvider();
         break;
       }
-      case "Facebook Signup": {
+      case FACEBOOK_PROVIDER_TYPE: {
         provider = new FacebookAuthProvider();
         break;
       }
-      case "Twitter Signup": {
+      case TWITTER_PROVIDER_TYPE: {
         provider = new TwitterAuthProvider();
         break;
       }
@@ -95,10 +96,7 @@ export const useLoginStore = defineStore("loginStore", () => {
       if (e.message.includes("auth/account-exists-with-different-credential")) {
         state.error = `account exists with different credential`;
       }
-      console.error(
-        e.message,
-        e.message.includes("auth/account-exists-with-different-credential")
-      );
+      console.error(e.message);
     }
   };
 
