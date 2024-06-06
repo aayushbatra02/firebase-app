@@ -2,11 +2,11 @@
   <div class="md:flex justify-centerbg-white min-h-[100vh]">
     <div class="md:w-[50%]"></div>
     <div
-      class="md:w-[50%] flex items-center justify-center pt-12 flex-col md:bg-gradient-to-r from-[#2c7af5] to-darkBg md:text-[white] md:fixed top-0 bottom-0"
+      class="md:w-[50%] flex items-center justify-center pt-12 flex-col md:bg-gradient-to-r from-[#2c7af5] to-darkBlue md:text-[white] md:fixed top-0 bottom-0"
     >
       <p class="text-xl mb-4 md:mb-12">Welcome To</p>
       <h1
-        class="text-4xl font-bold font-sans mb-4 italic text-darkBg md:text-white"
+        class="text-4xl font-bold font-sans mb-4 italic text-darkBlue md:text-white"
       >
         SOCIOGRAM
       </h1>

@@ -6,7 +6,7 @@
       <h1 class="text-2xl text-[green] font-bold">{{ title }}</h1>
       <P class="text-xl">{{ description }}</P>
       <button
-        class="bg-darkBg border-2 border-darkBg text-white px-12 py-2 text-xl rounded-lg hover:bg-[white] hover:text-darkBg mt-4"
+        class="bg-darkBlue border-2 border-darkBlue text-white px-12 py-2 text-xl rounded-lg hover:bg-[white] hover:text-darkBlue mt-4"
         @click="$emit('onConfirmButton')"
       >
         {{ confirmButtonText }}

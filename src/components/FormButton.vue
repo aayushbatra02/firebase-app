@@ -1,11 +1,11 @@
 <template>
   <button
-    class="border-2 border-darkBg py-3 rounded-lg w-[100%] text-lg h-16"
+    class="border-2 border-darkBlue py-3 rounded-lg w-[100%] text-lg h-16"
     :class="[
       iconName
-        ? 'bg-white text-darkBg hover:bg-darkBg hover:text-white capitalize'
-        : 'bg-darkBg text-white hover:bg-[white] hover:text-darkBg uppercase',
-      loading ? 'cursor-not-allowed hover:bg-darkBg' : '',
+        ? 'bg-white text-darkBlue hover:bg-darkBlue hover:text-white capitalize'
+        : 'bg-darkBlue text-white hover:bg-[white] hover:text-darkBlue uppercase',
+      loading ? 'cursor-not-allowed hover:bg-darkBlue' : '',
     ]"
     @click.prevent="$emit('onSubmit')"
     :disabled="loading"

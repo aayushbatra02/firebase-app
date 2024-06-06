@@ -1,6 +1,6 @@
 <template>
   <form
-    class="flex flex-col gap-6 w-[95%] md:w-[50%] sm:w-[80%] items-center justify-center mx-auto my-12 border border-[3px] border-darkBg rounded-xl py-8 md:py-0 md:border-none"
+    class="flex flex-col gap-6 w-[95%] md:w-[50%] sm:w-[80%] items-center justify-center mx-auto my-12 border border-[3px] border-darkBlue rounded-xl py-8 md:py-0 md:border-none"
   >
     <h1 class="text-3xl font-bold text-center text">REGISTER</h1>
     <div class="flex flex-col gap-4 items-center w-[80%] sm:w-[70%] md:w-[50%]">
@@ -48,7 +48,7 @@
           <img
             v-if="userData.imageUrl"
             :src="userData.imageUrl"
-            class="w-[6rem] h-[6rem] rounded-[50%] object-cover"
+            class="w-[6rem] h-[6rem] rounded-full object-cover"
           />
         </div>
         <p class="text-[red] mt-2">{{ signupErrorMessage.profilePhoto }}</p>
@@ -123,7 +123,7 @@
       <form-button buttonText="register" @onSubmit="registerUser" :loading="loading"/>
       <p class="mt-4">
         Already have an account?
-        <RouterLink class="text-darkBg" to="/login">Login</RouterLink>
+        <RouterLink class="text-darkBlue" to="/login">Login</RouterLink>
       </p>
     </div>
   </form>
