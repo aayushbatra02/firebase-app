@@ -23,6 +23,7 @@ export const useAuthStore = defineStore("authStore", () => {
       );
       state.user = userCredential.user;
       await createUserInFireStore(userData, state.user.uid);
+      localStorage.setItem("loggedIn", true);
     } catch (error) {
       if (error.message.includes("email-already-in-use")) {
         state.error = "Email already in use !";
@@ -39,7 +40,7 @@ export const useAuthStore = defineStore("authStore", () => {
     uid,
     socialAuth
   ) => {
-    const storageRef = ref(storage, uid);
+    const storageRef = ref(storage, `profilePhotos/${uid}`);
     const snapshot = await uploadBytes(storageRef, profilePhoto);
 
     const downloadURL = socialAuth
