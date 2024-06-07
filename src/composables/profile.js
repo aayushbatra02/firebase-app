@@ -127,5 +127,6 @@ export const useProfile = () => {
     validate,
     errorMessages,
     buttonLoader,
+    userDetails
   };
 };

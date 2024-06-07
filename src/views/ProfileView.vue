@@ -8,9 +8,10 @@
       v-else
     >
       <div>
-        <label class="font-bold inline-block text-sm md:text-base w-[8rem]">FIRST NAME</label
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]"
+          >FIRST NAME</label
         ><input
-          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded "
+          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded"
           :disabled="!editProfile"
           v-model.trim="editUserDetails.firstName"
           @input="validate('firstName')"
@@ -20,9 +21,10 @@
         </p>
       </div>
       <div>
-        <label class="font-bold inline-block text-sm md:text-base w-[8rem]">LAST NAME</label
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]"
+          >LAST NAME</label
         ><input
-          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded "
+          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded"
           :disabled="!editProfile"
           v-model.trim="editUserDetails.lastName"
           @input="validate('lastName')"
@@ -32,9 +34,20 @@
         </p>
       </div>
       <div>
-        <label class="font-bold inline-block text-sm md:text-base w-[8rem]">Mobile No</label>
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]"
+          >EMAIL</label
+        ><input
+          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded"
+          :value="userDetails.email"
+          disabled
+        />
+      </div>
+      <div>
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]"
+          >Mobile No</label
+        >
         <input
-          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded "
+          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded"
           :disabled="!editProfile"
           v-model.trim="editUserDetails.mobileNo"
           @input="handleMobileInput(editUserDetails, validate)"
@@ -44,7 +57,9 @@
         </p>
       </div>
       <div class="flex items-center">
-        <label class="font-bold inline-block text-sm md:text-base w-[8rem]">Profile Pic</label>
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]"
+          >Profile Pic</label
+        >
         <div v-if="editUserDetails.profilePhoto" class="flex">
           <img
             :src="editUserDetails.profilePhoto"
@@ -104,6 +119,7 @@ const {
   validate,
   errorMessages,
   buttonLoader,
+  userDetails,
 } = useProfile();
 
 const { handleMobileInput } = useRegister();
