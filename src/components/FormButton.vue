@@ -1,6 +1,6 @@
 <template>
   <button
-    class="border-2 border-darkBlue py-3 rounded-lg w-[100%] text-lg h-16"
+    class="border-2 border-darkBlue py-3 rounded-lg w-[100%] text-lg h-12 flex justify-center items-center"
     :class="[
       iconName
         ? 'bg-white text-darkBlue hover:bg-darkBlue hover:text-white capitalize'

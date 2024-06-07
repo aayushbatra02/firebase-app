@@ -1,19 +1,17 @@
 <template>
-  <nav-bar v-if="showNav()" />
+  <nav-bar v-if="user" />
   <router-view />
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
 import NavBar from "./components/NavBar.vue";
-
-const showNav = () => {
-  const route = useRoute();
-  if (route.path === "/login" || route.path === "/register") {
-    return false;
-  }
-  return true;
-};
+import { ref, watch } from "vue";
+const user = ref(null)
+const route = useRoute()
+watch(()=> route.name, () => {
+  user.value = localStorage.getItem("loggedIn")
+})
 </script>
 
 <style>

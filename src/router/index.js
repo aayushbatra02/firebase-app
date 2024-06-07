@@ -1,11 +1,14 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import NotFoundView from "../views/NotFoundView.vue";
-import { useUser } from "@/composables/user";
 
 const routes = [
   {
     path: "/",
-    name: "home",
+    redirect: '/login'
+  },
+  {
+    path: "/post-list",
+    name: "postList",
     component: () => import("../views/HomeView.vue"),
   },
   {
@@ -36,12 +39,14 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const { getCurrentUser } = useUser();
-  const user = await getCurrentUser();
-  if (!user && to.name !== "login" && to.name !== "register") {
+  const loggedIn = localStorage.getItem("loggedIn");
+  if (!loggedIn && to.name !== "login" && to.name !== "register") {
     next({ name: "login" });
-  } else if (user && (to.name === "login" || to.name === "register")) {
-    next({ name: "home" });
+  } else if (
+    loggedIn &&
+    (to.name === "login" || to.name === "register")
+  ) {
+    next({ name: "postList" });
   } else {
     next();
   }

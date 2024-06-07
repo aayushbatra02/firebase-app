@@ -1,163 +1,111 @@
 <template>
   <div class="flex flex-col justify-center items-center gap-4 mt-12">
-    <div v-if="loading">LOADING USER...</div>
+    <div v-if="loading" class="fixed inset-0 flex justify-center">
+      <spinning-loader :large="true" />
+    </div>
     <div
-      class="border border-darkBlue w-max m-auto p-4 rounded-lg flex flex-col gap-4"
+      class="border border-darkBlue w-max m-auto p-4 rounded-lg flex flex-col gap-6"
       v-else
     >
       <div>
-        <label class="font-bold inline-block w-[8rem]">FIRST NAME</label
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]">FIRST NAME</label
         ><input
-          class="border border-darkBlue px-2 py-1"
+          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded "
           :disabled="!editProfile"
-          v-model="editUserDetails.firstName"
+          v-model.trim="editUserDetails.firstName"
+          @input="validate('firstName')"
         />
+        <p v-if="editProfile" class="text-red-500">
+          {{ errorMessages.firstName }}
+        </p>
       </div>
       <div>
-        <label class="font-bold inline-block w-[8rem]">LAST NAME</label
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]">LAST NAME</label
         ><input
-          class="border border-darkBlue px-2 py-1"
+          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded "
           :disabled="!editProfile"
-          v-model="editUserDetails.lastName"
+          v-model.trim="editUserDetails.lastName"
+          @input="validate('lastName')"
         />
+        <p v-if="editProfile" class="text-red-500">
+          {{ errorMessages.lastName }}
+        </p>
       </div>
       <div>
-        <label class="font-bold inline-block w-[8rem]">EMAIL</label>
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]">Mobile No</label>
         <input
-          class="border border-darkBlue px-2 py-1"
+          class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded "
           :disabled="!editProfile"
-          v-model="editUserDetails.email"
+          v-model.trim="editUserDetails.mobileNo"
+          @input="handleMobileInput(editUserDetails, validate)"
         />
-      </div>
-      <div>
-        <label class="font-bold inline-block w-[8rem]">Mobile No</label>
-        <input
-          class="border border-darkBlue px-2 py-1"
-          :disabled="!editProfile"
-          v-model="editUserDetails.mobileNo"
-        />
+        <p v-if="editProfile" class="text-red-500">
+          {{ errorMessages.mobileNo }}
+        </p>
       </div>
       <div class="flex items-center">
-        <label class="font-bold inline-block w-[8rem]">Profile Pic</label>
-        <img
-          v-if="editUserDetails?.profilePhoto && !editProfile"
-          :src="editUserDetails.profilePhoto"
-          alt="profile pic"
-          class="w-16 h-16 rounded-full object-cover"
-        />
-        <div v-else>
-          <div v-if="editProfile" class="flex flex-col gap-4">
-            <input
-              type="file"
-              @change="uploadImage"
-              class="mt-4 w-min"
-              accept="image/*"
-            />
-            <img
-              v-if="editUserDetails?.imageUrl"
-              :src="editUserDetails?.imageUrl"
-              class="w-12 h-12 rounded-full object-cover"
-            />
-          </div>
-          <div v-else>N/A</div>
+        <label class="font-bold inline-block text-sm md:text-base w-[8rem]">Profile Pic</label>
+        <div v-if="editUserDetails.profilePhoto" class="flex">
+          <img
+            :src="editUserDetails.profilePhoto"
+            alt="profile pic"
+            class="w-16 h-16 rounded-full object-cover"
+          />
+          <Icon
+            v-if="editProfile"
+            icon="charm:cross"
+            class="cursor-pointer"
+            @click="deleteProfilePic"
+          />
+        </div>
+        <div v-if="!editProfile && !editUserDetails.profilePhoto">
+          <div>N/A</div>
+        </div>
+        <div
+          v-if="!editUserDetails.profilePhoto && editProfile"
+          class="flex flex-col gap-4"
+        >
+          <input
+            type="file"
+            @change="uploadImage"
+            class="mt-4 w-min"
+            accept="image/*"
+          />
         </div>
       </div>
-      <button
-        class="w-max border-2 border-darkBlue text-darkBlue px-4 py-1 m-auto mt-2 rounded-lg hover:bg-darkBlue hover:text-white"
-        @click="handleProfile"
-      >
-        {{ !editProfile ? `Edit Profile` : `Save Profile` }}
-      </button>
+      <p v-if="editProfile" class="text-red-500">
+        {{ errorMessages.profilePhoto }}
+      </p>
+      <div class="w-[60%] m-auto mt-4">
+        <form-button
+          :buttonText="!editProfile ? `Edit Profile` : `Save Profile`"
+          @onSubmit="handleProfile"
+          :loading="buttonLoader"
+        />
+      </div>
     </div>
   </div>
 </template>
   
 <script setup>
-import { onMounted, reactive, ref } from "vue";
-import { useUser } from "@/composables/user";
-import { getDocs, query, updateDoc, where } from "firebase/firestore";
-import { storage, usersRef } from "@/firebase";
-import {
-  ref as firebaseRef,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
+import { Icon } from "@iconify/vue";
+import FormButton from "@/components/FormButton.vue";
+import SpinningLoader from "@/components/SpinningLoader.vue";
+import { useProfile } from "@/composables/profile";
+import { useRegister } from "@/composables/register";
 
-const loading = ref(false);
-const { getCurrentUser, getUserByUID, userDetails } = useUser();
-const editProfile = ref(false);
+const {
+  handleProfile,
+  uploadImage,
+  deleteProfilePic,
+  loading,
+  editProfile,
+  editUserDetails,
+  validate,
+  errorMessages,
+  buttonLoader,
+} = useProfile();
 
-const editUserDetails = reactive({
-  firstName: "",
-  lastName: "",
-  email: "",
-  mobileNo: "",
-  profilePhoto: "",
-  imageUrl: "",
-});
-
-onMounted(async () => {
-  loading.value = true;
-  const user = await getCurrentUser();
-  await getUserByUID(user?.uid);
-  editUserDetails.firstName = userDetails.value.firstName
-    ? userDetails.value.firstName
-    : "N/A";
-  editUserDetails.lastName = userDetails.value.lastName
-    ? userDetails.value.lastName
-    : "N/A";
-  editUserDetails.email = userDetails.value.email
-    ? userDetails.value.email
-    : "N/A";
-  editUserDetails.mobileNo = userDetails.value.mobileNo
-    ? userDetails.value.mobileNo
-    : "N/A";
-  editUserDetails.profilePhoto = userDetails.value.profilePhoto
-    ? `${userDetails.value.profilePhoto}`
-    : false;
-  loading.value = false;
-  //   console.log({ user: userDetails.value, edit: editUserDetails });
-  console.log(storage, firebaseRef, uploadBytes, getDownloadURL);
-});
-
-const handleProfile = async () => {
-  if (!editProfile.value) {
-    editProfile.value = true;
-    for (let key in editUserDetails) {
-      if (editUserDetails[key] === "N/A") {
-        editUserDetails[key] = "";
-      }
-    }
-  } else {
-    console.log(userDetails.value);
-    const q = query(
-      usersRef,
-      where("uid", "==", "iktzs0rXLPhjzM6tdwRQfGjX1Is2")
-    );
-    const querySnapshot = await getDocs(q);
-    const docRef = querySnapshot.docs[0].ref;
-    console.log(docRef);
-    // const storageRef = firebaseRef(storage, userDetails.uid);
-    // const snapshot = await uploadBytes(
-    //   storageRef,
-    //   editUserDetails.profilePhoto
-    // );
-
-    // const downloadURL =  await getDownloadURL(snapshot.ref);
-    // editUserDetails.imageUrl = downloadURL;
-    console.log("HERE")
-    await updateDoc(docRef, editUserDetails);
-  }
-};
-
-const uploadImage = (e) => {
-  const profilePhoto = e.target.files[0];
-  if (profilePhoto && profilePhoto.type.startsWith("image/")) {
-    editUserDetails.profilePhoto = profilePhoto;
-    editUserDetails.imageUrl = URL.createObjectURL(profilePhoto);
-  } else {
-    console.log("Please Select Image Only");
-  }
-};
+const { handleMobileInput } = useRegister();
 </script>
   

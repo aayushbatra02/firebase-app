@@ -30,7 +30,7 @@
           type="text"
           placeholder="Mobile No"
           v-model.trim="userData.mobileNo"
-          @input="handleMobileInput"
+          @input="handleMobileInput(userData, validate)"
         />
         <p class="text-[red] mt-2">{{ signupErrorMessage.mobileNo }}</p>
       </div>
@@ -120,7 +120,11 @@
     </div>
     <div class="w-[50%]">
       <p v-if="error" class="text-[red] mb-2">{{ error }}</p>
-      <form-button buttonText="register" @onSubmit="registerUser" :loading="loading"/>
+      <form-button
+        buttonText="register"
+        @onSubmit="registerUser"
+        :loading="loading"
+      />
       <p class="mt-4">
         Already have an account?
         <RouterLink class="text-darkBlue" to="/login">Login</RouterLink>

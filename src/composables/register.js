@@ -5,7 +5,6 @@ import router from "@/router";
 import { useAuthStore } from "@/stores/authStore";
 import { authenticate } from "@/utils/authenticate";
 
-
 export const useRegister = () => {
   const { handleRegister } = useAuthStore();
   const { error, showConfirmationModal } = storeToRefs(useAuthStore());
@@ -66,10 +65,10 @@ export const useRegister = () => {
     }
   };
 
-  const isErrorPresent = (signupErrorMessage) => {
+  const isErrorPresent = (errorMessage) => {
     let isPresent = false;
-    for (let key in signupErrorMessage) {
-      if (signupErrorMessage[key]) {
+    for (let key in errorMessage) {
+      if (errorMessage[key]) {
         isPresent = true;
       }
     }
@@ -98,7 +97,7 @@ export const useRegister = () => {
 
   const closeConfirmationModal = () => {
     showConfirmationModal.value = !showConfirmationModal.value;
-    router.push("/");
+    router.push("/post-list");
   };
 
   const route = useRoute();
@@ -109,7 +108,7 @@ export const useRegister = () => {
     },
     { immediate: true }
   );
-  const handleMobileInput = () => {
+  const handleMobileInput = (userData, validate) => {
     userData.mobileNo = userData.mobileNo.replace(/\D/g, "");
     validate("mobileNo");
   };
@@ -123,5 +122,6 @@ export const useRegister = () => {
     closeConfirmationModal,
     onLoginPage,
     handleMobileInput,
+    isErrorPresent,
   };
 };

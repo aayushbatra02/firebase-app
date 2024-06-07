@@ -6,11 +6,16 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useAuthStore } from "./authStore";
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { reactive, toRefs } from "vue";
 import { auth } from "@/firebase";
 import router from "@/router";
-import { FACEBOOK_PROVIDER_TYPE, GOOGLE_PROVIDER_TYPE, TWITTER_PROVIDER_TYPE } from "@/contants";
+import {
+  FACEBOOK_PROVIDER_TYPE,
+  GOOGLE_PROVIDER_TYPE,
+  TWITTER_PROVIDER_TYPE,
+} from "@/contants";
+import { useUserStore } from "./userStore";
 
 export const useLoginStore = defineStore("loginStore", () => {
   const state = reactive({
@@ -26,7 +31,8 @@ export const useLoginStore = defineStore("loginStore", () => {
         loginData.email,
         loginData.password
       );
-      router.push("/");
+      localStorage.setItem("loggedIn", true);
+      router.push("/post-list");
     } catch (error) {
       const errorCode = error.code;
       switch (errorCode) {
@@ -90,8 +96,16 @@ export const useLoginStore = defineStore("loginStore", () => {
         profilePhoto,
         email,
       };
-      await createUserInFireStore(userDetails, uid, true);
-      router.push("/");
+      const { getUserByUID } = useUserStore();
+      const { userDetails: userDetailsFromFirebase } = storeToRefs(
+        useUserStore()
+      );
+      await getUserByUID(uid);
+      if (!(userDetailsFromFirebase.value)) {
+        await createUserInFireStore(userDetails, uid, true);
+      }
+      localStorage.setItem("loggedIn", true);
+      router.push("/post-list");
     } catch (e) {
       if (e.message.includes("auth/account-exists-with-different-credential")) {
         state.error = `account exists with different credential`;

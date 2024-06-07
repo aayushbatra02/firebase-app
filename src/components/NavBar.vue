@@ -24,13 +24,13 @@
       >
         <div
           @click="handleSignout"
-          class="flex gap-2 justify-center items-center px-6 py-2 cursor-pointer text-darkBlue hover:font-bold"
+          class="flex gap-2 justify-center items-center px-6 py-2 cursor-pointer text-darkBlue hover:font-bold bg-white"
         >
           <Icon icon="material-symbols:logout" class="w-6 h-6 text-red-400" />
           <span>Logout</span>
         </div>
         <div
-          class="w-full py-2 text-center text-darkBlue border-t-2 border-darkBlue cursor-pointer hover:font-bold"
+          class="w-full py-2 text-center text-darkBlue border-t-2 border-darkBlue cursor-pointer hover:font-bold bg-white"
         >
           <RouterLink to="/profile">User Profile</RouterLink>
         </div>
@@ -42,13 +42,15 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref, watch } from "vue";
-import { useUser } from "@/composables/user";
 import { signOut } from "firebase/auth";
 import router from "@/router";
 import { auth } from "@/firebase";
 import { useRoute } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+import { storeToRefs } from "pinia";
 
-const { getCurrentUser, getUserByUID, userDetails } = useUser();
+const { getCurrentUser, getUserByUID } = useUserStore();
+const { userDetails } = storeToRefs(useUserStore());
 const showLogout = ref(false);
 const route = useRoute();
 
@@ -67,6 +69,7 @@ const toggleLogout = () => {
 
 const handleSignout = () => {
   signOut(auth);
+  localStorage.removeItem("loggedIn");
   router.push("/login");
 };
 </script>
