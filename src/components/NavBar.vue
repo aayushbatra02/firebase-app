@@ -1,15 +1,15 @@
 <template>
   <nav
-    class="bg-darkBlue text-white flex justify-between items-center relative h-[4rem]"
+    class="bg-darkBlue text-white flex justify-between items-center relative h-[4rem] px-4"
   >
-    <div class="flex gap-8 ml-4">
+    <div class="flex gap-8">
       <button v-for="(link, id) in navLinks" :key="id">
         <RouterLink :to="link.path" class="hover:font-bold">{{
           link.name
         }}</RouterLink>
       </button>
     </div>
-    <button @click="toggleLogout" class="w-[10rem] flex justify-center">
+    <button @click="toggleLogout">
       <img
         :src="userDetails?.profilePhoto"
         alt="profile photo"
@@ -30,11 +30,13 @@
           <Icon icon="material-symbols:logout" class="w-6 h-6 text-red-400" />
           <span>Logout</span>
         </div>
-        <div
+        <RouterLink
+          to="/profile"
           class="w-full py-2 text-center text-darkBlue border-t-2 border-darkBlue cursor-pointer hover:font-bold bg-white"
+          @click="toggleLogout"
         >
-          <RouterLink to="/profile">User Profile</RouterLink>
-        </div>
+          User Profile
+        </RouterLink>
       </div>
     </div>
   </nav>
