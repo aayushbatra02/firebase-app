@@ -4,7 +4,7 @@
   >
     <div class="flex gap-8">
       <button v-for="(link, id) in navLinks" :key="id">
-        <RouterLink :to="link.path" class="hover:font-bold">{{
+        <RouterLink :to="link.path" class="hover:font-bold" active-class="font-bold border-b-2 pb-1">{{
           link.name
         }}</RouterLink>
       </button>
@@ -63,7 +63,7 @@ const navLinks = [
   },
   {
     name: "Add Post",
-    path: "/post-list",
+    path: "/add-post",
   },
 ];
 

@@ -36,6 +36,7 @@ export const useRegister = () => {
 
   const uploadImage = (e) => {
     userData.imageUrl = null;
+    signupErrorMessage.profilePhoto = null
     const profilePhoto = e.target.files[0];
     if (profilePhoto && profilePhoto.type.startsWith("image/")) {
       userData.profilePhoto = profilePhoto;

@@ -29,6 +29,7 @@ import SpinningLoader from "@/components/SpinningLoader.vue";
 import { Icon } from "@iconify/vue";
 
 defineProps(["buttonText", "loading", "iconName", "alignLeft"]);
-defineEmits(["onSubmit"]);
+const emits = defineEmits(["onSubmit"]);
+console.log(emits("onSubmit"));
 </script>
 
