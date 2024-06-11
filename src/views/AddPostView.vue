@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex flex-col gap-6 my-10 w-max mx-auto"
-  >
+  <div class="flex flex-col gap-6 my-10 w-max mx-auto">
     <div class="font-bold text-2xl">Create a Post</div>
     <div>
       <input
@@ -93,3 +91,15 @@ const {
   loading,
 } = useAddPost();
 </script>
+
+<style>
+.ck-content {
+  height: 8rem;
+}
+
+@media (max-width: 768px) {
+  .ck-content {
+    height: 5rem;
+  }
+}
+</style>
