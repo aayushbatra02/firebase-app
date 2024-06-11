@@ -31,4 +31,3 @@ import { Icon } from "@iconify/vue";
 defineProps(["buttonText", "loading", "iconName", "alignLeft"]);
 defineEmits(["onSubmit"]);
 </script>
-
