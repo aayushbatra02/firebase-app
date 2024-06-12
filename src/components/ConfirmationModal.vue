@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 bg-[rgba(0,0,0,0.7)] flex justify-center items-center"
+    class="fixed inset-0 bg-[rgba(0,0,0,0.7)] flex justify-center items-center z-10"
   >
     <div class="bg-[white] p-12 flex flex-col items-center gap-6 relative">
       <h1 class="text-2xl text-[green] font-bold">{{ title }}</h1>

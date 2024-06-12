@@ -74,8 +74,8 @@
     <confirmation-modal
       v-if="showConfirmationModal"
       @on-confirm-button="closeConfirmationModal"
-      title="congratulations"
-      description="Post created successfully !!!"
+      title="Congratulations"
+      description="Post Created Successfully"
       confirm-button-text="OK"
     />
   </div>
