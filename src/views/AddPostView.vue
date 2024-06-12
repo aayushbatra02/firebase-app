@@ -77,7 +77,7 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { useAddPost } from "@/composables/addPost";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import FormButton from "@/components/FormButton.vue";
 
 const {
@@ -90,6 +90,7 @@ const {
   validate,
   loading,
 } = useAddPost();
+
 </script>
 
 <style>
