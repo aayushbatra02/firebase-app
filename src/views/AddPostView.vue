@@ -71,6 +71,13 @@
         :loading="loading"
       />
     </div>
+    <confirmation-modal
+      v-if="showConfirmationModal"
+      @on-confirm-button="closeConfirmationModal"
+      title="congratulations"
+      description="Post created successfully !!!"
+      confirm-button-text="OK"
+    />
   </div>
 </template>
 
@@ -81,6 +88,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import FormButton from "@/components/FormButton.vue";
 import { storeToRefs } from "pinia";
 import { usePostStore } from "@/stores/postStore";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
 const {
   uploadImage,
@@ -90,6 +98,8 @@ const {
   generateSlug,
   errorMessage,
   validate,
+  showConfirmationModal,
+  closeConfirmationModal,
 } = useAddPost();
 
 const { loading } = storeToRefs(usePostStore());

@@ -3,6 +3,7 @@ import slugify from "slugify";
 import { authenticate } from "@/utils/authenticate";
 import { useRegister } from "./register";
 import { usePostStore } from "@/stores/postStore";
+import router from "@/router";
 
 export const useAddPost = () => {
   const { isErrorPresent } = useRegister();
@@ -23,7 +24,12 @@ export const useAddPost = () => {
   });
 
   const validateForm = ref(false);
+  const showConfirmationModal = ref(false);
 
+  const closeConfirmationModal = () => {
+    showConfirmationModal.value = false;
+    router.push("/post-list");
+  };
   const uploadImage = (e) => {
     postDetails.postImage = null;
     const profilePhoto = e.target.files[0];
@@ -61,6 +67,7 @@ export const useAddPost = () => {
       await handleAddPost(postDetails);
       validateForm.value = false;
       clearData(postDetails);
+      showConfirmationModal.value = true;
     }
   };
 
@@ -80,5 +87,7 @@ export const useAddPost = () => {
     generateSlug,
     errorMessage,
     validate,
+    showConfirmationModal,
+    closeConfirmationModal,
   };
 };
