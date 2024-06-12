@@ -1,6 +1,6 @@
 import { onMounted, reactive, ref } from "vue";
-import { getDocs, query, updateDoc, where } from "firebase/firestore";
-import { storage, usersRef } from "@/firebase";
+import { collection, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { db, storage } from "@/firebase";
 import {
   ref as firebaseRef,
   uploadBytes,
@@ -81,6 +81,7 @@ export const useProfile = () => {
         validate(key);
       }
       if (!isErrorPresent(errorMessages)) {
+        const usersRef = collection(db, "users");
         const q = query(usersRef, where("uid", "==", userDetails.value?.uid));
         const querySnapshot = await getDocs(q);
         const docRef = querySnapshot.docs[0].ref;

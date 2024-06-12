@@ -24,22 +24,25 @@
     <div v-if="showLogout" class="fixed inset-0" @click.self="toggleLogout">
       <div
         v-if="showLogout"
-        class="absolute top-[4rem] right-[0] flex flex-col items-center border-l-2 border-b-2 border-darkBlue border-t-none w-[10rem]"
+        class="absolute top-[4rem] right-[0] flex flex-col items-left border-l-2 border-b-2 border-darkBlue border-t-none w-[10rem]"
       >
+        <RouterLink
+          to="/profile"
+          class="w-full py-2 pl-6 text-center text-darkBlue border-b-2 border-darkBlue cursor-pointer hover:font-bold bg-white"
+          @click="toggleLogout"
+        >
+          <div class="flex gap-2 justify-left items-center">
+            <Icon icon="gg:profile" class="w-6 h-6"/>
+            <div>User Profile</div>
+          </div>
+        </RouterLink>
         <div
           @click="handleSignout"
-          class="flex gap-2 justify-center items-center px-6 py-2 cursor-pointer text-darkBlue hover:font-bold bg-white"
+          class="flex gap-2 pl-6 justify-left w-max items-center py-2 cursor-pointer text-darkBlue hover:font-bold bg-white"
         >
           <Icon icon="material-symbols:logout" class="w-6 h-6 text-red-400" />
           <span>Logout</span>
         </div>
-        <RouterLink
-          to="/profile"
-          class="w-full py-2 text-center text-darkBlue border-t-2 border-darkBlue cursor-pointer hover:font-bold bg-white"
-          @click="toggleLogout"
-        >
-          User Profile
-        </RouterLink>
       </div>
     </div>
   </nav>

@@ -64,7 +64,7 @@
 
       <p class="text-red-500">{{ errorMessage.postImage }}</p>
     </div>
-    <div class="w-[60%] m-auto">
+    <div class="w-[60%] m-auto mt-4">
       <form-button
         buttonText="Add Post"
         @onSubmit="addPost"
@@ -77,8 +77,10 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { useAddPost } from "@/composables/addPost";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import FormButton from "@/components/FormButton.vue";
+import { storeToRefs } from "pinia";
+import { usePostStore } from "@/stores/postStore";
 
 const {
   uploadImage,
@@ -88,9 +90,9 @@ const {
   generateSlug,
   errorMessage,
   validate,
-  loading,
 } = useAddPost();
 
+const { loading } = storeToRefs(usePostStore());
 </script>
 
 <style>
