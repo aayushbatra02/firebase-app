@@ -53,7 +53,6 @@ export const usePostStore = defineStore("postStore", () => {
       },
     };
     addDoc(postsRef, post);
-    console.log("Post Added ", post);
   };
   return { ...toRefs(state), handleAddPost };
 });
