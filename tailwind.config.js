@@ -9,6 +9,9 @@ module.exports = {
         lightBg: "#EEEEEE",
         lightGray: "#f2f4f6",
       },
+      screens: {
+        '3xl' : '2500px',
+      },
     },
   },
   variants: {
