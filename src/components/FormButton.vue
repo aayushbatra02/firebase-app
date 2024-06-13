@@ -3,8 +3,8 @@
     class="border-2 border-darkBlue py-3 rounded-lg w-[100%] text-lg h-12 flex justify-center items-center"
     :class="[
       iconName
-        ? 'bg-white text-darkBlue hover:bg-darkBlue hover:text-white capitalize'
-        : 'bg-darkBlue text-white hover:bg-[white] hover:text-darkBlue uppercase',
+        ? 'bg-transparent text-darkBlue hover:bg-darkBlue hover:text-white capitalize'
+        : 'bg-darkBlue text-white hover:bg-transparent hover:text-darkBlue uppercase',
       loading ? 'cursor-not-allowed hover:bg-darkBlue' : '',
     ]"
     @click.prevent="$emit('onSubmit')"

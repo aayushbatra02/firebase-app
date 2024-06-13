@@ -2,7 +2,7 @@
   <div class="bg-lightGray min-h-[calc(100vh-4rem)] py-8">
     <div class="w-max mx-auto bg-white shadow-lg rounded-xl">
       <div
-        class="font-bold text-2xl text-center bg-darkBlue text-white rounded-t-lg py-4 px-8"
+        class="font-bold text-2xl text-center bg-darkBlue text-white rounded-t-xl py-4 px-8"
       >
         Create a Post
       </div>
@@ -72,7 +72,7 @@
         </div>
       </div>
       <div
-        class="p-4 border-t-2 border-gray-300 flex justify-between bg-lightGray"
+        class="p-4 border-t-2 border-gray-300 flex justify-between bg-lightGray rounded-b-xl"
       >
         <button
           class="text-darkBlue rounded-lg leading-tight flex gap-1 justify-left items-center hover:font-bold"
