@@ -59,7 +59,7 @@
               v-if="!postDetails.imageUrl"
               type="file"
               accept="image/*"
-              @change="uploadImage"
+              @change="addImage"
               class="w-[15rem] 3xl:w-[25rem] bg-lightGray border border-gray-300 rounded-md p-4 cursor-pointer hover:bg-[#e0e0e0] custom-upload-button"
             />
             <div v-if="postDetails.imageUrl" class="flex">
@@ -117,7 +117,7 @@ import { usePostStore } from "@/stores/postStore";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 
 const {
-  uploadImage,
+  addImage,
   postDetails,
   deletePostImage,
   addPost,

@@ -31,6 +31,7 @@ export const useUserStore = defineStore("userStore", () => {
         if (!querySnapshot.empty) {
           const doc = querySnapshot.docs[0];
           state.userDetails = doc.data();
+          state.userDetails.id = doc.id;
         } else {
           console.error("No user found with the specified UID");
         }

@@ -6,9 +6,8 @@ import { usePostStore } from "@/stores/postStore";
 import router from "@/router";
 
 export const useAddPost = () => {
-  const { isErrorPresent } = useRegister();
-  const { clearData } = useRegister();
-  const { handleAddPost } = usePostStore();
+  const { isErrorPresent, clearData } = useRegister();
+  const { createPost } = usePostStore();
   const postDetails = reactive({
     title: null,
     slug: null,
@@ -30,7 +29,8 @@ export const useAddPost = () => {
     showConfirmationModal.value = false;
     router.push("/post-list");
   };
-  const uploadImage = (e) => {
+
+  const addImage = (e) => {
     postDetails.postImage = null;
     const profilePhoto = e.target.files[0];
     errorMessage.postImage = null;
@@ -64,7 +64,7 @@ export const useAddPost = () => {
       validate(key);
     }
     if (!isErrorPresent(errorMessage)) {
-      await handleAddPost(postDetails);
+      await createPost(postDetails);
       validateForm.value = false;
       clearData(postDetails);
       showConfirmationModal.value = true;
@@ -84,7 +84,7 @@ export const useAddPost = () => {
   };
 
   return {
-    uploadImage,
+    addImage,
     postDetails,
     deletePostImage,
     addPost,

@@ -14,7 +14,7 @@ export const usePostStore = defineStore("postStore", () => {
   const state = reactive({
     loading: false,
   });
-  const handleAddPost = async (postDetails) => {
+  const createPost = async (postDetails) => {
     try {
       state.loading = true;
       await createPostInFirebase(postDetails);
@@ -54,5 +54,5 @@ export const usePostStore = defineStore("postStore", () => {
     };
     addDoc(postsRef, post);
   };
-  return { ...toRefs(state), handleAddPost };
+  return { ...toRefs(state), createPost };
 });
