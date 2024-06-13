@@ -47,10 +47,10 @@ export const authenticate = (fieldName, value, condition) => {
         break;
       }
       default: {
-        if (condition.min && value.length < condition.min) {
-          return `${fieldName} must contain ${condition.min} characters`;
-        } else if (condition.equal && value.length !== condition.equal) {
-          return `${fieldName} must contain ${condition.equal} characters only`;
+        if (condition?.min && value.length < condition?.min) {
+          return `${fieldName} must contain ${condition?.min} characters`;
+        } else if (condition?.equal && value.length !== condition?.equal) {
+          return `${fieldName} must contain ${condition?.equal} characters only`;
         }
       }
     }

@@ -1,6 +1,9 @@
 import { onMounted, reactive, ref } from "vue";
-import { getDocs, query, updateDoc, where } from "firebase/firestore";
-import { storage, usersRef } from "@/firebase";
+import {
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db, storage } from "@/firebase";
 import {
   ref as firebaseRef,
   uploadBytes,
@@ -81,9 +84,7 @@ export const useProfile = () => {
         validate(key);
       }
       if (!isErrorPresent(errorMessages)) {
-        const q = query(usersRef, where("uid", "==", userDetails.value?.uid));
-        const querySnapshot = await getDocs(q);
-        const docRef = querySnapshot.docs[0].ref;
+        const userDocRef = doc(db, "users", userDetails.value.id);
         const storageRef = firebaseRef(
           storage,
           `profilePhotos/${userDetails.value.uid}`
@@ -93,7 +94,7 @@ export const useProfile = () => {
           const downloadURL = await getDownloadURL(snapshot.ref);
           editUserDetails.profilePhoto = downloadURL;
         }
-        await updateDoc(docRef, editUserDetails);
+        await updateDoc(userDocRef, editUserDetails);
         editProfile.value = false;
         await updateUser();
       }
@@ -127,6 +128,6 @@ export const useProfile = () => {
     validate,
     errorMessages,
     buttonLoader,
-    userDetails
+    userDetails,
   };
 };

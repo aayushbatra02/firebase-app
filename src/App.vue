@@ -7,6 +7,7 @@
 import { useRoute } from "vue-router";
 import NavBar from "./components/NavBar.vue";
 import { ref, watch } from "vue";
+
 const user = ref(null)
 const route = useRoute()
 watch(()=> route.name, () => {

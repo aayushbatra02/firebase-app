@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, usersRef, storage } from "@/firebase";
-import { addDoc } from "firebase/firestore";
+import { auth, db, storage } from "@/firebase";
+import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const useAuthStore = defineStore("authStore", () => {
@@ -46,7 +46,7 @@ export const useAuthStore = defineStore("authStore", () => {
     const downloadURL = socialAuth
       ? profilePhoto
       : await getDownloadURL(snapshot.ref);
-
+    const usersRef = collection(db, "users");
     addDoc(usersRef, {
       firstName,
       lastName,

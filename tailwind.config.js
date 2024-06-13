@@ -7,6 +7,10 @@ module.exports = {
       colors: {
         darkBlue: "#0E2954",
         lightBg: "#EEEEEE",
+        lightGray: "#f2f4f6",
+      },
+      screens: {
+        '3xl' : '2500px',
       },
     },
   },

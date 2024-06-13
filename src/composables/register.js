@@ -36,6 +36,7 @@ export const useRegister = () => {
 
   const uploadImage = (e) => {
     userData.imageUrl = null;
+    signupErrorMessage.profilePhoto = null;
     const profilePhoto = e.target.files[0];
     if (profilePhoto && profilePhoto.type.startsWith("image/")) {
       userData.profilePhoto = profilePhoto;
@@ -77,7 +78,11 @@ export const useRegister = () => {
 
   const clearData = (obj) => {
     for (let key in obj) {
-      obj[key] = null;
+      if (key === "description") {
+        obj[key] = "";
+      } else {
+        obj[key] = null;
+      }
     }
   };
 
@@ -123,5 +128,6 @@ export const useRegister = () => {
     onLoginPage,
     handleMobileInput,
     isErrorPresent,
+    clearData,
   };
 };

@@ -38,7 +38,7 @@
           >EMAIL</label
         ><input
           class="border border-darkBlue w-[8rem] md:w-[15rem] p-1 md:p-2 rounded bg-gray-300"
-          :value="userDetails.email"
+          :value="userDetails?.email"
           disabled
         />
       </div>
