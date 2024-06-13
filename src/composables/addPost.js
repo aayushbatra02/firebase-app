@@ -79,6 +79,10 @@ export const useAddPost = () => {
     });
   };
 
+  const goBack = () => {
+    router.push("/post-list");
+  };
+
   return {
     uploadImage,
     postDetails,
@@ -89,5 +93,6 @@ export const useAddPost = () => {
     validate,
     showConfirmationModal,
     closeConfirmationModal,
+    goBack
   };
 };
