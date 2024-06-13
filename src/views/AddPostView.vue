@@ -72,7 +72,7 @@
         </div>
       </div>
       <div
-        class="p-4 border-t-2 border-gray-300 flex justify-between bg-lightGray rounded-b-xl"
+        class="p-4 flex justify-between bg-gray-300 rounded-b-xl"
       >
         <button
           class="text-darkBlue rounded-lg leading-tight flex gap-1 justify-left items-center hover:font-bold"
