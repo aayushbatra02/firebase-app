@@ -7,6 +7,7 @@ import { defineStore } from "pinia";
 export const useUserStore = defineStore("userStore", () => {
   const state = reactive({
     userDetails: null,
+    loadingUsers: false,
   });
 
   const getCurrentUser = () => {
@@ -40,9 +41,27 @@ export const useUserStore = defineStore("userStore", () => {
       console.error("Error fetching user data:", error);
     }
   };
+
+  const getAllUsers = async () => {
+    try {
+      state.loadingUsers = true;
+      const users = [];
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        users.push(doc.data());
+      });
+      return users;
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.loadingUsers = false;
+    }
+  };
+
   return {
     getCurrentUser,
     getUserByUID,
+    getAllUsers,
     ...toRefs(state),
   };
 });

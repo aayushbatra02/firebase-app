@@ -24,6 +24,9 @@ export const useAddPost = () => {
 
   const validateForm = ref(false);
   const showConfirmationModal = ref(false);
+  const showTagUserModal = ref(false);
+
+  const taggedUsers = ref([]);
 
   const closeConfirmationModal = () => {
     showConfirmationModal.value = false;
@@ -83,6 +86,21 @@ export const useAddPost = () => {
     router.push("/post-list");
   };
 
+  const toggleTagUserModal = () => {
+    showTagUserModal.value = !showTagUserModal.value;
+  };
+
+  const tagUser = (user) => {
+    const isPresent = taggedUsers.value.find(({ uid }) => uid === user.uid);
+    if (!isPresent) {
+      taggedUsers.value.push(user);
+    }
+  };
+
+  const removeTag = (user) => {
+    taggedUsers.value = taggedUsers.value.filter(({ uid }) => uid !== user.uid);
+  };
+
   return {
     addImage,
     postDetails,
@@ -93,6 +111,11 @@ export const useAddPost = () => {
     validate,
     showConfirmationModal,
     closeConfirmationModal,
-    goBack
+    goBack,
+    showTagUserModal,
+    toggleTagUserModal,
+    taggedUsers,
+    tagUser,
+    removeTag
   };
 };

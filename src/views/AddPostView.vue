@@ -60,7 +60,7 @@
               type="file"
               accept="image/*"
               @change="addImage"
-              class="w-[15rem] 3xl:w-[25rem] bg-lightGray border border-gray-300 rounded-md p-4 cursor-pointer hover:bg-[#e0e0e0] custom-upload-button"
+              class="w-[15rem] 3xl:w-[25rem] bg-lightGray border border-gray-300 rounded-md p-4 cursor-pointer hover:bg-[#e0e0e0]"
             />
             <div v-if="postDetails.imageUrl" class="flex">
               <img
@@ -77,6 +77,14 @@
           </div>
 
           <p class="text-red-500">{{ errorMessage.postImage }}</p>
+        </div>
+        <div>
+          <button
+            class="bg-lightGray border border-gray-500 rounded-md px-4 py-1 cursor-pointer hover:bg-gray-500 hover:text-white"
+            @click="toggleTagUserModal"
+          >
+            Tag User
+          </button>
         </div>
       </div>
       <div
@@ -103,18 +111,26 @@
         description="Post Created Successfully"
         confirm-button-text="OK"
       />
+      <tag-user-modal
+        v-if="showTagUserModal"
+        @toggle-tag-user-modal="toggleTagUserModal"
+        :taggedUsers="taggedUsers"
+        @tagUser="tagUser"
+        @removeTag="removeTag"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
+import { storeToRefs } from "pinia";
 import { Icon } from "@iconify/vue";
 import { useAddPost } from "@/composables/addPost";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import FormButton from "@/components/FormButton.vue";
-import { storeToRefs } from "pinia";
 import { usePostStore } from "@/stores/postStore";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
+import TagUserModal from "@/components/TagUserModal.vue";
 
 const {
   addImage,
@@ -127,7 +143,14 @@ const {
   showConfirmationModal,
   closeConfirmationModal,
   goBack,
+  showTagUserModal,
+  toggleTagUserModal,
+  taggedUsers,
+  tagUser,
+  removeTag
 } = useAddPost();
+
+showTagUserModal.value = true;
 
 const { loading } = storeToRefs(usePostStore());
 </script>

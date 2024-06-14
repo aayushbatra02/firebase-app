@@ -2,10 +2,10 @@
   <button
     class="border-2 border-darkBlue py-3 rounded-lg w-[100%] text-lg 3xl:text-2xl h-12 3xl:h-[5rem] flex justify-center items-center"
     :class="[
-      iconName
-        ? 'bg-transparent text-darkBlue hover:bg-darkBlue hover:text-white capitalize'
-        : 'bg-darkBlue text-white hover:bg-transparent hover:text-darkBlue uppercase',
-      loading ? 'cursor-not-allowed hover:bg-darkBlue' : '',
+      iconName ? 'capitalize' : 'uppercase',
+      loading
+        ? 'cursor-not-allowed hover:bg-darkBlue'
+        : 'text-white hover:text-darkBlue bg-darkBlue hover:bg-transparent',
     ]"
     @click.prevent="$emit('onSubmit')"
     :disabled="loading"
