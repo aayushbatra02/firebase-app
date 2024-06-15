@@ -19,7 +19,7 @@ export const usePostStore = defineStore("postStore", () => {
       state.loading = true;
       await createPostInFirebase(postDetails);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       state.loading = false;
     }
@@ -57,7 +57,7 @@ export const usePostStore = defineStore("postStore", () => {
       };
       addDoc(postsRef, post);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
   return { ...toRefs(state), createPost };

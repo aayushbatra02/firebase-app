@@ -65,7 +65,6 @@ export const useAddPost = () => {
     for (let key in errorMessage) {
       validate(key);
     }
-    console.log(errorMessage);
     if (!isErrorPresent(errorMessage)) {
       await createPost(postDetails);
       validateForm.value = false;
