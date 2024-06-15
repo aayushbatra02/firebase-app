@@ -30,16 +30,16 @@ export const useAddPost = () => {
   const closeConfirmationModal = () => {
     showConfirmationModal.value = false;
     router.push("/post-list");
-  };
+  };  
 
   const addImage = (e) => {
     postDetails.postImage = null;
-    const profilePhoto = e.target.files[0];
+    const postImage = e.target.files[0];
     errorMessage.postImage = null;
-    if (profilePhoto && profilePhoto.type.startsWith("image/")) {
-      postDetails.postImage = profilePhoto;
-      postDetails.imageUrl = URL.createObjectURL(profilePhoto);
-      validate("profilePhoto");
+    if (postImage && postImage.type.startsWith("image/")) {
+      postDetails.postImage = postImage;
+      postDetails.imageUrl = URL.createObjectURL(postImage);
+      validate("postImage");
     } else {
       errorMessage.postImage = "Please Select Image Only";
     }
@@ -65,6 +65,7 @@ export const useAddPost = () => {
     for (let key in errorMessage) {
       validate(key);
     }
+    console.log(errorMessage);
     if (!isErrorPresent(errorMessage)) {
       await createPost(postDetails);
       validateForm.value = false;
@@ -90,14 +91,18 @@ export const useAddPost = () => {
   };
 
   const tagUser = (user) => {
-    const isPresent = postDetails.taggedUsers.find(({ uid }) => uid === user.uid);
+    const isPresent = postDetails.taggedUsers.find(
+      ({ uid }) => uid === user.uid
+    );
     if (!isPresent) {
       postDetails.taggedUsers.push(user);
     }
   };
 
   const removeTag = (user) => {
-    postDetails.taggedUsers = postDetails.taggedUsers.filter(({ uid }) => uid !== user.uid);
+    postDetails.taggedUsers = postDetails.taggedUsers.filter(
+      ({ uid }) => uid !== user.uid
+    );
   };
 
   return {

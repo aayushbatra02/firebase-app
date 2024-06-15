@@ -1,7 +1,8 @@
 <template>
   <div
     class="fixed inset-0 bg-[rgba(0,0,0,0.7)] flex justify-center items-center z-10"
-  >
+    @click.self ="$emit('toggleTagUserModal')"
+    >
     <div
       class="bg-white p-8 rounded-lg relative w-[95%] md:w-[40%] 2xl:w-[30%]"
     >
@@ -16,17 +17,18 @@
       <input
         type="text"
         placeholder="Search User"
-        class="border border-darkBlue rounded p-2 3xl:p-4 w-full"
+        class="border border-darkBlue rounded p-2 3xl:p-4 3xl:text-2xl w-full"
         v-model="searchedUser"
       />
-      <div class="h-[10rem] 3xl:h-[20rem] w-[16rem]" v-if="loadingUsers">
+      {{ console.log(loadingUsers) }}
+      <div class="h-[10rem] 3xl:h-[20rem]" v-if="loadingUsers">
         <spinning-loader :large="true" />
       </div>
       <ul
-        class="h-[10rem] 3xl:h-[20rem] overflow-auto mt-4 3xl:mt-8 border border-darkBlue rounded"
+        class="h-[10rem] 3xl:h-[20rem] overflow-auto mt-4 3xl:mt-8 border border-darkBlue rounded 3xl:text-2xl"
         v-else
       >
-        <div v-if="filteredUsers.length === 0" class="p-2 3xl:p-4">
+        <div v-if="filteredUsers.length === 0" class="p-2 3xl:p-4 text-center text-lg text-gray-400">
           No Users
         </div>
         <li
@@ -46,7 +48,7 @@
         </li>
       </ul>
       <div class="mt-4">
-        <div class="flex gap-2 3xl:gap-4 flex-wrap">
+        <div class="flex gap-2 3xl:gap-4 flex-wrap 3xl:text-2xl">
           <div v-for="user in taggedUsers" :key="user.uid">
             <div
               class="bg-gray-300 text-black p-2 3xl:p-4 rounded flex justify-center items-center gap-2 3xl:gap-4 capitalize"
@@ -55,7 +57,7 @@
               <Icon
                 icon="charm:cross"
                 @click="$emit('removeTag', user)"
-                class="cursor-pointer mt-1 3xl:mt-2"
+                class="cursor-pointer"
               />
             </div>
           </div>
