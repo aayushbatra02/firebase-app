@@ -1,20 +1,20 @@
 <template>
   <div
-    class="bg-lightGray min-h-[calc(100vh-4rem)] 3xl:min-h-[calc(100vh-7rem)] py-8 3xl:py-14 3xl:text-3xl"
+    class="bg-lightGray min-h-[calc(100vh-3rem)] 3xl:min-h-[calc(100vh-5rem)] py-8 3xl:py-14 3xl:text-3xl"
   >
     <div class="w-max mx-auto bg-white shadow-lg rounded-xl 3xl:rounded-2xl">
       <div
-        class="font-bold text-lg md:text-2xl 3xl:text-4xl text-center bg-darkBlue text-white rounded-t-xl 3xl:rounded-t-2xl py-4 3xl:py-8 px-8 3xl:px-16 3xl:px-16"
+        class="font-bold md:text-lg 3xl:text-3xl text-center bg-darkBlue text-white rounded-t-xl 3xl:rounded-t-2xl py-2 3xl:py-6"
       >
         Create a Post
       </div>
       <div
-        class="px-8 3xl:px-16 flex flex-col gap-6 3xl:gap-12 my-6 3xl:my-12 3xl:text-2xl"
+        class="px-8 3xl:px-16 flex flex-col gap-4 3xl:gap-8 my-4 3xl:my-8 text-sm 3xl:text-2xl"
       >
         <div>
           <input
             type="text"
-            class="border border-gray-300 w-[15rem] md:w-[20rem] lg:w-[25rem] 3xl:w-[40rem] p-1 3xl:p-4 sm:p-2 rounded"
+            class="border border-gray-300 w-[15rem] md:w-[20rem] lg:w-[25rem] 3xl:w-[40rem] p-1 md:p-2 3xl:p-2 px-2 3xl:px-4 rounded"
             @input="generateSlug"
             v-model.trim="postDetails.title"
             placeholder="Add Title"
@@ -25,7 +25,7 @@
           <input
             disabled
             type="text"
-            class="border border-gray-300 w-[15rem] md:w-[20rem] lg:w-[25rem] 3xl:w-[40rem] p-1 3xl:p-4 sm:p-2 rounded bg-gray-300"
+            class="border border-gray-300 w-[15rem] md:w-[20rem] lg:w-[25rem] 3xl:w-[40rem] p-1 md:p-2 3xl:p-2 px-2 3xl:px-4 rounded"
             v-model.trim="postDetails.slug"
             placeholder="Slug"
           />
@@ -33,7 +33,7 @@
         <div>
           <div class="flex flex-col gap-4">
             <label
-              class="font-bold inline-block text-sm 3xl:text-2xl sm:text-base w-[10rem] 3xl:w-[20rem] border-darkBlue"
+              class="font-bold inline-block text-sm 3xl:text-xl w-[10rem] 3xl:w-[20rem] border-darkBlue"
               >Add a Description...</label
             >
             <div
@@ -53,7 +53,7 @@
         <div>
           <div class="flex flex-col gap-4">
             <label
-              class="font-bold inline-block text-sm sm:text-base 3xl:text-2xl w-[10rem]"
+              class="font-bold inline-block text-sm 3xl:text-2xl w-[10rem]"
               >Upload Image</label
             ><input
               v-if="!postDetails.imageUrl"
@@ -96,7 +96,7 @@
           <Icon icon="ion:arrow-back" class="w-4 3xl:w-8 h-6 3xl:h-8 mt-1" />
           <div @click="goBack">Back</div>
         </button>
-        <div class="w-[40%]">
+        <div class="w-[50%] md:w-[30%]">
           <form-button
             buttonText="Add Post"
             @onSubmit="addPost"
@@ -146,10 +146,11 @@ const {
   showTagUserModal,
   changeTagUserModalVisibility,
   tagUser,
-  removeTag
+  removeTag,
 } = useAddPost();
 
 const { loading } = storeToRefs(usePostStore());
+
 </script>
 
 <style>

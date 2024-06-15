@@ -1,6 +1,6 @@
 <template>
   <form
-    class="flex flex-col gap-6 w-[95%] md:w-[50%] sm:w-[80%] items-center justify-center mx-auto my-12 border border-[3px] border-darkBlue rounded-xl py-8 md:py-0 md:border-none"
+    class="flex flex-col gap-6 w-[95%] md:w-[50%] sm:w-[80%] items-center justify-center mx-auto my-12 border-[3px] border-darkBlue rounded-xl py-8 md:py-0 md:border-none"
   >
     <h1 class="text-3xl font-bold text-center text">LOGIN</h1>
 

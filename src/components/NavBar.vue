@@ -1,12 +1,12 @@
 <template>
   <nav
-    class="bg-darkBlue text-white flex justify-between items-center relative h-[4rem] 3xl:h-[7rem] px-4 3xl:px-8"
+    class="bg-darkBlue text-white flex justify-between items-center relative h-[3rem] 3xl:h-[5rem] px-4 3xl:px-8 text-sm"
   >
     <div class="flex gap-8 3xl:gap-16">
       <button v-for="(link, id) in navLinks" :key="id">
         <RouterLink
           :to="link.path"
-          class="hover:font-bold 3xl:text-2xl"
+          class="hover:font-bold 3xl:text-xl"
           active-class="font-bold border-b-2 pb-1 3xl:pb-2"
           >{{ link.name }}</RouterLink
         >
@@ -28,7 +28,7 @@
     <div v-if="showLogout" class="absolute inset-0" @click.self="toggleLogout">
       <div
         v-if="showLogout"
-        class="absolute top-[4rem] 3xl:top-[7rem] right-[0] flex flex-col items-left border-l-2 border-b-2 border-darkBlue border-t-none w-[10rem] 3xl:w-[20rem] 3xl:text-2xl"
+        class="absolute top-[3rem] 3xl:top-[5rem] right-[0] flex flex-col items-left border-l-2 border-b-2 border-darkBlue border-t-none w-[10rem] 3xl:w-[20rem] 3xl:text-xl"
       >
         <RouterLink
           to="/profile"
