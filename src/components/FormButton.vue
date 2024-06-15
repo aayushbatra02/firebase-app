@@ -1,6 +1,6 @@
 <template>
   <button
-    class="border-2 border-darkBlue py-3 rounded-lg w-[100%] text-lg 3xl:text-2xl h-12 3xl:h-[5rem] flex justify-center items-center"
+    class="border-2 border-darkBlue py-3 rounded-lg w-[100%] md:text-lg 3xl:text-2xl h-12 3xl:h-[5rem] flex justify-center items-center"
     :class="[
       iconName ? 'capitalize' : 'uppercase',
       loading

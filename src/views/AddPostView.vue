@@ -4,7 +4,7 @@
   >
     <div class="w-max mx-auto bg-white shadow-lg rounded-xl 3xl:rounded-2xl">
       <div
-        class="font-bold text-2xl 3xl:text-4xl text-center bg-darkBlue text-white rounded-t-xl 3xl:rounded-t-2xl py-4 3xl:py-8 px-8 3xl:px-16 3xl:px-16"
+        class="font-bold text-lg md:text-2xl 3xl:text-4xl text-center bg-darkBlue text-white rounded-t-xl 3xl:rounded-t-2xl py-4 3xl:py-8 px-8 3xl:px-16 3xl:px-16"
       >
         Create a Post
       </div>
@@ -83,7 +83,7 @@
             class="bg-lightGray border border-gray-500 rounded-md px-4 py-1 cursor-pointer hover:bg-gray-500 hover:text-white"
             @click="toggleTagUserModal"
           >
-            Tag User
+            Tag Users
           </button>
         </div>
       </div>
@@ -114,7 +114,7 @@
       <tag-user-modal
         v-if="showTagUserModal"
         @toggle-tag-user-modal="toggleTagUserModal"
-        :taggedUsers="taggedUsers"
+        :taggedUsers="postDetails.taggedUsers"
         @tagUser="tagUser"
         @removeTag="removeTag"
       />
@@ -145,12 +145,9 @@ const {
   goBack,
   showTagUserModal,
   toggleTagUserModal,
-  taggedUsers,
   tagUser,
   removeTag
 } = useAddPost();
-
-showTagUserModal.value = true;
 
 const { loading } = storeToRefs(usePostStore());
 </script>

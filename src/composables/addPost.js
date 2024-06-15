@@ -14,6 +14,7 @@ export const useAddPost = () => {
     description: "",
     postImage: null,
     imageUrl: null,
+    taggedUsers: [],
   });
 
   const errorMessage = reactive({
@@ -25,8 +26,6 @@ export const useAddPost = () => {
   const validateForm = ref(false);
   const showConfirmationModal = ref(false);
   const showTagUserModal = ref(false);
-
-  const taggedUsers = ref([]);
 
   const closeConfirmationModal = () => {
     showConfirmationModal.value = false;
@@ -91,14 +90,14 @@ export const useAddPost = () => {
   };
 
   const tagUser = (user) => {
-    const isPresent = taggedUsers.value.find(({ uid }) => uid === user.uid);
+    const isPresent = postDetails.taggedUsers.find(({ uid }) => uid === user.uid);
     if (!isPresent) {
-      taggedUsers.value.push(user);
+      postDetails.taggedUsers.push(user);
     }
   };
 
   const removeTag = (user) => {
-    taggedUsers.value = taggedUsers.value.filter(({ uid }) => uid !== user.uid);
+    postDetails.taggedUsers = postDetails.taggedUsers.filter(({ uid }) => uid !== user.uid);
   };
 
   return {
@@ -114,8 +113,7 @@ export const useAddPost = () => {
     goBack,
     showTagUserModal,
     toggleTagUserModal,
-    taggedUsers,
     tagUser,
-    removeTag
+    removeTag,
   };
 };
