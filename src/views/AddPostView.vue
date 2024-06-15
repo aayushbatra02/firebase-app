@@ -81,7 +81,7 @@
         <div>
           <button
             class="bg-lightGray border border-gray-500 rounded-md px-4 py-1 cursor-pointer hover:bg-gray-500 hover:text-white"
-            @click="toggleTagUserModal"
+            @click="changeTagUserModalVisibility"
           >
             Tag Users
           </button>
@@ -113,7 +113,7 @@
       />
       <tag-user-modal
         v-if="showTagUserModal"
-        @toggle-tag-user-modal="toggleTagUserModal"
+        @change-tag-user-modal-visibility="changeTagUserModalVisibility"
         :taggedUsers="postDetails.taggedUsers"
         @tagUser="tagUser"
         @removeTag="removeTag"
@@ -144,7 +144,7 @@ const {
   closeConfirmationModal,
   goBack,
   showTagUserModal,
-  toggleTagUserModal,
+  changeTagUserModalVisibility,
   tagUser,
   removeTag
 } = useAddPost();

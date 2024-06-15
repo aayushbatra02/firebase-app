@@ -86,7 +86,7 @@ export const useAddPost = () => {
     router.push("/post-list");
   };
 
-  const toggleTagUserModal = () => {
+  const changeTagUserModalVisibility = () => {
     showTagUserModal.value = !showTagUserModal.value;
   };
 
@@ -117,7 +117,7 @@ export const useAddPost = () => {
     closeConfirmationModal,
     goBack,
     showTagUserModal,
-    toggleTagUserModal,
+    changeTagUserModalVisibility,
     tagUser,
     removeTag,
   };

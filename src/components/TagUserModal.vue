@@ -1,7 +1,7 @@
 <template>
   <div
     class="fixed inset-0 bg-[rgba(0,0,0,0.7)] flex justify-center items-center z-10"
-    @click.self ="$emit('toggleTagUserModal')"
+    @click.self ="$emit('changeTagUserModalVisibility')"
     >
     <div
       class="bg-white p-8 rounded-lg relative w-[95%] md:w-[40%] 2xl:w-[30%]"
@@ -9,7 +9,7 @@
       <Icon
         icon="charm:cross"
         class="cursor-pointer w-6 3xl:w-12 h-6 3xl:h-12 absolute top-4 right-4"
-        @click="$emit('toggleTagUserModal')"
+        @click="$emit('changeTagUserModalVisibility')"
       />
       <h2 class="font-bold mb-4 3xl:mb-8 text-center text-xl 3xl:text-4xl">
         Tag Users
@@ -20,7 +20,6 @@
         class="border border-darkBlue rounded p-2 3xl:p-4 3xl:text-2xl w-full"
         v-model="searchedUser"
       />
-      {{ console.log(loadingUsers) }}
       <div class="h-[10rem] 3xl:h-[20rem]" v-if="loadingUsers">
         <spinning-loader :large="true" />
       </div>
@@ -74,7 +73,7 @@ import { Icon } from "@iconify/vue";
 import { useUserStore } from "@/stores/userStore";
 import SpinningLoader from "@/components/SpinningLoader.vue";
 
-defineEmits(["toggleTagUserModal", "tagUser", "removeTag"]);
+defineEmits(["changeTagUserModalVisibility", "tagUser", "removeTag"]);
 defineProps(["taggedUsers"]);
 const { getAllUsers } = useUserStore();
 const { loadingUsers, userDetails } = storeToRefs(useUserStore());
