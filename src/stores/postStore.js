@@ -13,6 +13,7 @@ import { addDoc, collection } from "firebase/firestore";
 export const usePostStore = defineStore("postStore", () => {
   const state = reactive({
     loading: false,
+    taggedUsers: [],
   });
   const createPost = async (postDetails) => {
     try {
@@ -30,7 +31,6 @@ export const usePostStore = defineStore("postStore", () => {
     description,
     slug,
     postImage,
-    taggedUsers
   }) => {
     try {
       const createdAt = Date.now();
@@ -45,7 +45,7 @@ export const usePostStore = defineStore("postStore", () => {
         description,
         slug,
         postImageUrl: downloadURL,
-        taggedUsers,
+        taggedUsers: state.taggedUsers,
         createdAt,
         updatedAt,
         createdBy: userDetails.value.uid,
@@ -60,5 +60,18 @@ export const usePostStore = defineStore("postStore", () => {
       console.error(e);
     }
   };
-  return { ...toRefs(state), createPost };
+
+  const tagUser = (user) => {
+    const isPresent = state.taggedUsers.find(({ uid }) => uid === user.uid);
+    if (!isPresent) {
+      state.taggedUsers.push(user);
+    }
+  };
+
+  const removeTag = (user) => {
+    state.taggedUsers = state.taggedUsers.filter(
+      (currentUser) => currentUser?.uid !== user?.uid
+    );
+  };
+  return { ...toRefs(state), createPost, tagUser, removeTag };
 });

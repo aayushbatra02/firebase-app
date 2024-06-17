@@ -4,17 +4,18 @@ import { authenticate } from "@/utils/authenticate";
 import { useRegister } from "./register";
 import { usePostStore } from "@/stores/postStore";
 import router from "@/router";
+import { storeToRefs } from "pinia";
 
 export const useAddPost = () => {
   const { isErrorPresent, clearData } = useRegister();
   const { createPost } = usePostStore();
+  const { taggedUsers } = storeToRefs(usePostStore());
   const postDetails = reactive({
     title: null,
     slug: null,
     description: "",
     postImage: null,
     imageUrl: null,
-    taggedUsers: [],
   });
 
   const errorMessage = reactive({
@@ -27,10 +28,12 @@ export const useAddPost = () => {
   const showConfirmationModal = ref(false);
   const showTagUserModal = ref(false);
 
-  const closeConfirmationModal = () => {
-    showConfirmationModal.value = false;
-    router.push("/post-list");
-  };  
+  const manageConfirmationModalVisibility = (route) => {
+    showConfirmationModal.value = !showConfirmationModal.value;
+    if (!route) {
+      router.push("/post-list");
+    }
+  };
 
   const addImage = (e) => {
     postDetails.postImage = null;
@@ -69,6 +72,7 @@ export const useAddPost = () => {
       await createPost(postDetails);
       validateForm.value = false;
       clearData(postDetails);
+      taggedUsers.value = [];
       showConfirmationModal.value = true;
     }
   };
@@ -89,21 +93,6 @@ export const useAddPost = () => {
     showTagUserModal.value = !showTagUserModal.value;
   };
 
-  const tagUser = (user) => {
-    const isPresent = postDetails.taggedUsers.find(
-      ({ uid }) => uid === user.uid
-    );
-    if (!isPresent) {
-      postDetails.taggedUsers.push(user);
-    }
-  };
-
-  const removeTag = (user) => {
-    postDetails.taggedUsers = postDetails.taggedUsers.filter(
-      ({ uid }) => uid !== user.uid
-    );
-  };
-
   return {
     addImage,
     postDetails,
@@ -113,11 +102,9 @@ export const useAddPost = () => {
     errorMessage,
     validate,
     showConfirmationModal,
-    closeConfirmationModal,
+    manageConfirmationModalVisibility,
     goBack,
     showTagUserModal,
     changeTagUserModalVisibility,
-    tagUser,
-    removeTag,
   };
 };

@@ -41,6 +41,7 @@
             >
               <Ckeditor
                 :editor="ClassicEditor"
+                :config="editorConfig"
                 v-model="postDetails.description"
                 @input="validate('description')"
                 placeholder="description"
@@ -52,8 +53,7 @@
         </div>
         <div>
           <div class="flex flex-col gap-4">
-            <label
-              class="font-bold inline-block text-sm 3xl:text-2xl w-[10rem]"
+            <label class="font-bold inline-block text-sm 3xl:text-2xl w-[10rem]"
               >Upload Image</label
             ><input
               v-if="!postDetails.imageUrl"
@@ -80,11 +80,12 @@
         </div>
         <div>
           <button
-            class="bg-lightGray border border-gray-500 rounded-md px-4 py-1 cursor-pointer hover:bg-gray-500 hover:text-white"
+            class="bg-lightGray border border-gray-500 rounded-md px-4 py-1 cursor-pointer hover:bg-gray-500 hover:text-white mb-4 3xl:mb-8"
             @click="changeTagUserModalVisibility"
           >
             Tag Users
           </button>
+          <tagged-users-list />
         </div>
       </div>
       <div
@@ -106,7 +107,7 @@
       </div>
       <confirmation-modal
         v-if="showConfirmationModal"
-        @on-confirm-button="closeConfirmationModal"
+        @on-confirm-button="manageConfirmationModalVisibility"
         title="Congratulations"
         description="Post Created Successfully"
         confirm-button-text="OK"
@@ -114,9 +115,6 @@
       <tag-user-modal
         v-if="showTagUserModal"
         @change-tag-user-modal-visibility="changeTagUserModalVisibility"
-        :taggedUsers="postDetails.taggedUsers"
-        @tagUser="tagUser"
-        @removeTag="removeTag"
       />
     </div>
   </div>
@@ -131,6 +129,8 @@ import FormButton from "@/components/FormButton.vue";
 import { usePostStore } from "@/stores/postStore";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import TagUserModal from "@/components/TagUserModal.vue";
+import TaggedUsersList from "@/components/TaggedUsersList";
+// import { SimpleUploadAdapter } from '@ckeditor/ckeditor5-upload';
 
 const {
   addImage,
@@ -141,16 +141,42 @@ const {
   errorMessage,
   validate,
   showConfirmationModal,
-  closeConfirmationModal,
+  manageConfirmationModalVisibility,
   goBack,
   showTagUserModal,
   changeTagUserModalVisibility,
-  tagUser,
-  removeTag,
 } = useAddPost();
 
 const { loading } = storeToRefs(usePostStore());
-
+const editorConfig = {
+  // plugins: [ SimpleUploadAdapter],
+  toolbar: [
+    "heading",
+    "|",
+    "bold",
+    "italic",
+    "link",
+    "bulletedList",
+    "numberedList",
+    "blockQuote",
+    "insertTable",
+    "tableColumn",
+    "tableRow",
+    "|",
+    "imageUpload", 
+    "|",
+    "undo",
+    "redo",
+  ],
+  image: {
+    toolbar: [
+      "imageStyle:full",
+      "imageStyle:side",
+      "|",
+      "imageTextAlternative",
+    ],
+  },
+};
 </script>
 
 <style>
