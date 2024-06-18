@@ -4,10 +4,12 @@ import { authenticate } from "@/utils/authenticate";
 import { useRegister } from "./register";
 import { usePostStore } from "@/stores/postStore";
 import router from "@/router";
+import { storeToRefs } from "pinia";
 
 export const useAddPost = () => {
   const { isErrorPresent, clearData } = useRegister();
   const { createPost } = usePostStore();
+  const { taggedUsers, descriptonImagesId } = storeToRefs(usePostStore());
   const postDetails = reactive({
     title: null,
     slug: null,
@@ -24,20 +26,23 @@ export const useAddPost = () => {
 
   const validateForm = ref(false);
   const showConfirmationModal = ref(false);
+  const showTagUserModal = ref(false);
 
-  const closeConfirmationModal = () => {
-    showConfirmationModal.value = false;
-    router.push("/post-list");
+  const manageConfirmationModalVisibility = (route) => {
+    showConfirmationModal.value = !showConfirmationModal.value;
+    if (!route) {
+      router.push("/post-list");
+    }
   };
 
   const addImage = (e) => {
     postDetails.postImage = null;
-    const profilePhoto = e.target.files[0];
+    const postImage = e.target.files[0];
     errorMessage.postImage = null;
-    if (profilePhoto && profilePhoto.type.startsWith("image/")) {
-      postDetails.postImage = profilePhoto;
-      postDetails.imageUrl = URL.createObjectURL(profilePhoto);
-      validate("profilePhoto");
+    if (postImage && postImage.type.startsWith("image/")) {
+      postDetails.postImage = postImage;
+      postDetails.imageUrl = URL.createObjectURL(postImage);
+      validate("postImage");
     } else {
       errorMessage.postImage = "Please Select Image Only";
     }
@@ -67,6 +72,8 @@ export const useAddPost = () => {
       await createPost(postDetails);
       validateForm.value = false;
       clearData(postDetails);
+      taggedUsers.value = [];
+      descriptonImagesId.value = [];
       showConfirmationModal.value = true;
     }
   };
@@ -83,6 +90,10 @@ export const useAddPost = () => {
     router.push("/post-list");
   };
 
+  const changeTagUserModalVisibility = () => {
+    showTagUserModal.value = !showTagUserModal.value;
+  };
+
   return {
     addImage,
     postDetails,
@@ -92,7 +103,9 @@ export const useAddPost = () => {
     errorMessage,
     validate,
     showConfirmationModal,
-    closeConfirmationModal,
-    goBack
+    manageConfirmationModalVisibility,
+    goBack,
+    showTagUserModal,
+    changeTagUserModalVisibility,
   };
 };

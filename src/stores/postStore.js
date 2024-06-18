@@ -13,13 +13,15 @@ import { addDoc, collection } from "firebase/firestore";
 export const usePostStore = defineStore("postStore", () => {
   const state = reactive({
     loading: false,
+    taggedUsers: [],
+    descriptonImagesId: [],
   });
   const createPost = async (postDetails) => {
     try {
       state.loading = true;
       await createPostInFirebase(postDetails);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       state.loading = false;
     }
@@ -31,28 +33,47 @@ export const usePostStore = defineStore("postStore", () => {
     slug,
     postImage,
   }) => {
-    const createdAt = Date.now();
-    const updatedAt = createdAt;
-    const storageRef = fireStoreRef(storage, `posts/${createdAt}`);
-    const snapshot = await uploadBytes(storageRef, postImage);
-    const downloadURL = await getDownloadURL(snapshot.ref);
-    const { userDetails } = storeToRefs(useUserStore());
-    const postsRef = collection(db, "posts");
-    const post = {
-      title,
-      description,
-      slug,
-      postImageUrl: downloadURL,
-      createdAt,
-      updatedAt,
-      createdBy: userDetails.value.uid,
-      userDetails: {
-        firstName: userDetails.value.firstName,
-        lastName: userDetails.value.lastName,
-        profilePhoto: userDetails.value.profilePhoto,
-      },
-    };
-    addDoc(postsRef, post);
+    try {
+      const createdAt = Date.now();
+      const updatedAt = createdAt;
+      const storageRef = fireStoreRef(storage, `posts/${createdAt}`);
+      const snapshot = await uploadBytes(storageRef, postImage);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      const { userDetails } = storeToRefs(useUserStore());
+      const postsRef = collection(db, "posts");
+      const post = {
+        title,
+        description,
+        slug,
+        postImageUrl: downloadURL,
+        descriptonImagesId: state.descriptonImagesId,
+        taggedUsers: state.taggedUsers,
+        createdAt,
+        updatedAt,
+        createdBy: userDetails.value.uid,
+        userDetails: {
+          firstName: userDetails.value.firstName,
+          lastName: userDetails.value.lastName,
+          profilePhoto: userDetails.value.profilePhoto,
+        },
+      };
+      addDoc(postsRef, post);
+    } catch (e) {
+      console.error(e);
+    }
   };
-  return { ...toRefs(state), createPost };
+
+  const tagUser = (user) => {
+    const isPresent = state.taggedUsers.find(({ uid }) => uid === user.uid);
+    if (!isPresent) {
+      state.taggedUsers.push(user);
+    }
+  };
+
+  const removeTag = (user) => {
+    state.taggedUsers = state.taggedUsers.filter(
+      (currentUser) => currentUser?.uid !== user?.uid
+    );
+  };
+  return { ...toRefs(state), createPost, tagUser, removeTag };
 });
