@@ -130,7 +130,7 @@ import { usePostStore } from "@/stores/postStore";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import TagUserModal from "@/components/TagUserModal.vue";
 import TaggedUsersList from "@/components/TaggedUsersList";
-// import { SimpleUploadAdapter } from '@ckeditor/ckeditor5-upload';
+import { FirebaseUploadAdapterPlugin } from "@/utils/firebaseUploadAdapter";
 
 const {
   addImage,
@@ -149,7 +149,7 @@ const {
 
 const { loading } = storeToRefs(usePostStore());
 const editorConfig = {
-  // plugins: [ SimpleUploadAdapter],
+  extraPlugins: [FirebaseUploadAdapterPlugin],
   toolbar: [
     "heading",
     "|",
@@ -163,19 +163,11 @@ const editorConfig = {
     "tableColumn",
     "tableRow",
     "|",
-    "imageUpload", 
+    "imageUpload",
     "|",
     "undo",
     "redo",
   ],
-  image: {
-    toolbar: [
-      "imageStyle:full",
-      "imageStyle:side",
-      "|",
-      "imageTextAlternative",
-    ],
-  },
 };
 </script>
 

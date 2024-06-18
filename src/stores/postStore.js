@@ -14,6 +14,7 @@ export const usePostStore = defineStore("postStore", () => {
   const state = reactive({
     loading: false,
     taggedUsers: [],
+    descriptonImagesId: [],
   });
   const createPost = async (postDetails) => {
     try {
@@ -45,6 +46,7 @@ export const usePostStore = defineStore("postStore", () => {
         description,
         slug,
         postImageUrl: downloadURL,
+        descriptonImagesId: state.descriptonImagesId,
         taggedUsers: state.taggedUsers,
         createdAt,
         updatedAt,

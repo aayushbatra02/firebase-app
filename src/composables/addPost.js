@@ -9,7 +9,7 @@ import { storeToRefs } from "pinia";
 export const useAddPost = () => {
   const { isErrorPresent, clearData } = useRegister();
   const { createPost } = usePostStore();
-  const { taggedUsers } = storeToRefs(usePostStore());
+  const { taggedUsers, descriptonImagesId } = storeToRefs(usePostStore());
   const postDetails = reactive({
     title: null,
     slug: null,
@@ -73,6 +73,7 @@ export const useAddPost = () => {
       validateForm.value = false;
       clearData(postDetails);
       taggedUsers.value = [];
+      descriptonImagesId.value = [];
       showConfirmationModal.value = true;
     }
   };
