@@ -3,24 +3,23 @@
     class="flex flex-col gap-6 w-[95%] md:w-[50%] sm:w-[80%] items-center justify-center mx-auto my-12 border-[3px] border-darkBlue rounded-xl py-8 md:py-0 md:border-none"
   >
     <h1 class="text-3xl font-bold text-center text">LOGIN</h1>
-
     <div class="flex flex-col gap-4 items-center w-[80%] sm:w-[70%] md:w-[50%]">
       <div class="w-[100%]">
+        <label class="text-[gray]">Email</label>
         <input
-          class="rounded p-3 bg-lightBg w-[100%]"
-          type="text"
-          placeholder="Email"
+        class="rounded-lg py-2 px-3 bg-lightBg w-[100%] mt-1"
+        type="text"
           v-model.trim="loginData.email"
           @input="validate('email')"
         />
         <p class="text-[red] mt-2">{{ loginErrorMessage.email }}</p>
       </div>
-      <div class="w-[100%] relative">
-        <div class="flex items-center">
+      <div class="w-[100%]">
+        <label class="text-[gray]">Password</label>
+        <div class="flex items-center relative mt-1">
           <input
-            class="rounded p-3 bg-lightBg w-[100%] pr-[15%]"
+          class="rounded-lg py-2 px-3 bg-lightBg w-[100%]"
             :type="showPassword ? 'text' : 'password'"
-            placeholder="Password"
             v-model.trim="loginData.password"
             @input="validate('password')"
           />
@@ -75,7 +74,11 @@ import { useLogin } from "@/composables/login";
 import { useShowPassword } from "@/composables/showPassword";
 import { useLoginStore } from "@/stores/loginStore";
 import FormButton from "@/components/FormButton.vue";
-import { FACEBOOK_PROVIDER_TYPE, GOOGLE_PROVIDER_TYPE, TWITTER_PROVIDER_TYPE } from "@/contants";
+import {
+  FACEBOOK_PROVIDER_TYPE,
+  GOOGLE_PROVIDER_TYPE,
+  TWITTER_PROVIDER_TYPE,
+} from "@/contants";
 const { loginData, loginErrorMessage, loginUser, validate } = useLogin();
 
 const { showPassword, togglePassword } = useShowPassword();

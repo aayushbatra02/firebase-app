@@ -8,13 +8,15 @@ import {
 import { db, storage } from "@/firebase";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/userStore";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 
 export const usePostStore = defineStore("postStore", () => {
   const state = reactive({
     loading: false,
     taggedUsers: [],
     descriptonImagesId: [],
+    loadingPosts: false,
+    postList: [],
   });
   const createPost = async (postDetails) => {
     try {
@@ -75,5 +77,21 @@ export const usePostStore = defineStore("postStore", () => {
       (currentUser) => currentUser?.uid !== user?.uid
     );
   };
-  return { ...toRefs(state), createPost, tagUser, removeTag };
+
+  const getAllPosts = async () => {
+    try {
+      state.loadingPosts = true;
+      let posts = [];
+      const querySnapshot = await getDocs(collection(db, "posts"));
+      querySnapshot.forEach((doc) => {
+        posts.push(doc.data());
+      });
+      state.postList = posts;
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.loadingPosts = false;
+    }
+  };
+  return { ...toRefs(state), createPost, tagUser, removeTag, getAllPosts };
 });

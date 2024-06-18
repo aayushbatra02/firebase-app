@@ -5,30 +5,30 @@
     <h1 class="text-3xl font-bold text-center text">REGISTER</h1>
     <div class="flex flex-col gap-4 items-center w-[80%] sm:w-[70%] md:w-[50%]">
       <div class="w-[100%]">
+        <label class="text-[gray]">First Name</label>
         <input
-          class="rounded p-3 bg-lightBg w-[100%]"
+          class="rounded-lg py-2 px-3 bg-lightBg w-[100%] mt-1"
           type="text"
-          placeholder="First Name"
           v-model.trim="userData.firstName"
           @input="validate('firstName')"
         />
         <p class="text-[red] mt-2">{{ signupErrorMessage.firstName }}</p>
       </div>
       <div class="w-[100%]">
+        <label class="text-[gray]">Last Name</label>
         <input
-          class="rounded p-3 bg-lightBg w-[100%]"
+          class="rounded-lg py-2 px-3 bg-lightBg w-[100%] mt-1"
           type="text"
-          placeholder="Last Name"
           v-model.trim="userData.lastName"
           @input="validate('lastName')"
         />
         <p class="text-[red] mt-2">{{ signupErrorMessage.lastName }}</p>
       </div>
       <div class="w-[100%]">
+        <label class="text-[gray]">Mobile No</label>
         <input
-          class="rounded p-3 bg-lightBg w-[100%]"
+          class="rounded-lg py-2 px-3 bg-lightBg w-[100%] mt-1"
           type="text"
-          placeholder="Mobile No"
           v-model.trim="userData.mobileNo"
           @input="handleMobileInput(userData, validate)"
         />
@@ -41,7 +41,7 @@
             <input
               type="file"
               @change="uploadImage"
-              class="mt-4 w-[15rem]"
+              class="mt-1 w-[15rem]"
               accept="image/*"
             />
           </div>
@@ -54,21 +54,22 @@
         <p class="text-[red] mt-2">{{ signupErrorMessage.profilePhoto }}</p>
       </div>
       <div class="w-[100%]">
+        <label class="text-[gray]">Email</label>
         <input
-          class="rounded p-3 bg-lightBg w-[100%]"
+          class="rounded-lg py-2 px-3 bg-lightBg w-[100%] mt-1"
           type="text"
-          placeholder="Email"
           v-model.trim="userData.email"
           @input="validate('email')"
         />
         <p class="text-[red] mt-2">{{ signupErrorMessage.email }}</p>
       </div>
-      <div class="w-[100%] relative">
-        <div class="flex items-center">
+
+      <div class="w-[100%]">
+        <label class="text-[gray]">Profile Photo</label>
+        <div class="flex items-center relative mt-1">
           <input
-            class="rounded p-3 bg-lightBg w-[100%] pr-[15%]"
+            class="rounded-lg py-2 px-3 bg-lightBg w-[100%]"
             :type="showPassword ? 'text' : 'password'"
-            placeholder="Password"
             v-model.trim="userData.password"
             @input="validate('password')"
           />
@@ -89,12 +90,12 @@
         </div>
         <p class="text-[red] mt-2">{{ signupErrorMessage.password }}</p>
       </div>
-      <div class="w-[100%] relative">
-        <div class="flex items-center">
+      <div class="w-[100%] ">
+        <label class="text-[gray]">Profile Photo</label>
+        <div class="flex items-center relative mt-1">
           <input
-            class="rounded p-3 bg-lightBg w-[100%]"
+            class="rounded-lg py-2 px-3 bg-lightBg w-[100%]"
             :type="showConfirmPassword ? 'text' : 'password'"
-            placeholder="Confirm Password"
             v-model.trim="userData.confirmPassword"
             @input="validate('confirmPassword')"
           />
