@@ -8,7 +8,15 @@ import {
 import { db, storage } from "@/firebase";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/userStore";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  startAfter,
+} from "firebase/firestore";
 
 export const usePostStore = defineStore("postStore", () => {
   const state = reactive({
@@ -17,6 +25,8 @@ export const usePostStore = defineStore("postStore", () => {
     descriptonImagesId: [],
     loadingPosts: false,
     postList: [],
+    lastVisible: null,
+    noMorePosts: false,
   });
   const createPost = async (postDetails) => {
     try {
@@ -79,14 +89,38 @@ export const usePostStore = defineStore("postStore", () => {
   };
 
   const getAllPosts = async () => {
+    if (state.noMorePosts) {
+      return;
+    }
     try {
       state.loadingPosts = true;
-      let posts = [];
-      const querySnapshot = await getDocs(collection(db, "posts"));
+      let q;
+      if (state.lastVisible) {
+        q = query(
+          collection(db, "posts"),
+          orderBy("createdAt", "desc"),
+          startAfter(state.lastVisible),
+          limit(5)
+        );
+      } else {
+        q = query(
+          collection(db, "posts"),
+          orderBy("createdAt", "desc"),
+          limit(5)
+        );
+      }
+
+      const querySnapshot = await getDocs(q);
+      const newPosts = [];
       querySnapshot.forEach((doc) => {
-        posts.push(doc.data());
+        newPosts.push(doc.data());
       });
-      state.postList = posts;
+      if (newPosts.length === 0) {
+        state.noMorePosts = true;
+      } else {
+        state.postList.push(...newPosts);
+        state.lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      }
     } catch (e) {
       console.error(e);
     } finally {

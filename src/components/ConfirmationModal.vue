@@ -9,12 +9,12 @@
       :class="[isClosable ? 'cursor-default' : null]"
     >
       <h1
-        class="text-2xl font-bold"
+        class="text-xl font-bold"
         :class="[isClosable ? 'text-[red]' : 'text-[green]']"
       >
         {{ title }}
       </h1>
-      <P class="text-xl">{{ description }}</P>
+      <P>{{ description }}</P>
       <div class="flex gap-4">
         <button
           class="border-2 text-white px-12 py-2 text-xl rounded-lg hover:bg-[white] mt-4"
