@@ -8,6 +8,7 @@ module.exports = {
         darkBlue: "#0E2954",
         lightBg: "#EEEEEE",
         lightGray: "#f2f4f6",
+        darkGray: "#8d8383"
       },
       screens: {
         '3xl' : '2500px',

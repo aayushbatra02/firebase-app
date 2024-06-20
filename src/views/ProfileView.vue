@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center items-center gap-4 mt-12">
+  <div class="flex flex-col justify-center items-center gap-4 mt-[10%]">
     <div v-if="loading" class="fixed inset-0 flex justify-center">
       <spinning-loader :large="true" />
     </div>

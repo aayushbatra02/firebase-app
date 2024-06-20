@@ -8,13 +8,25 @@ import {
 import { db, storage } from "@/firebase";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/userStore";
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  startAfter,
+} from "firebase/firestore";
 
 export const usePostStore = defineStore("postStore", () => {
   const state = reactive({
     loading: false,
     taggedUsers: [],
     descriptonImagesId: [],
+    loadingPosts: false,
+    postList: [],
+    lastVisible: null,
+    noMorePosts: false,
   });
   const createPost = async (postDetails) => {
     try {
@@ -75,5 +87,45 @@ export const usePostStore = defineStore("postStore", () => {
       (currentUser) => currentUser?.uid !== user?.uid
     );
   };
-  return { ...toRefs(state), createPost, tagUser, removeTag };
+
+  const getAllPosts = async () => {
+    if (state.noMorePosts) {
+      return;
+    }
+    try {
+      state.loadingPosts = true;
+      let firebaseQuery;
+      if (state.lastVisible) {
+        firebaseQuery = query(
+          collection(db, "posts"),
+          orderBy("createdAt", "desc"),
+          startAfter(state.lastVisible),
+          limit(5)
+        );
+      } else {
+        firebaseQuery = query(
+          collection(db, "posts"),
+          orderBy("createdAt", "desc"),
+          limit(5)
+        );
+      }
+
+      const querySnapshot = await getDocs(firebaseQuery);
+      const newPosts = [];
+      querySnapshot.forEach((doc) => {
+        newPosts.push(doc.data());
+      });
+      if (newPosts.length === 0) {
+        state.noMorePosts = true;
+      } else {
+        state.postList.push(...newPosts);
+        state.lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.loadingPosts = false;
+    }
+  };
+  return { ...toRefs(state), createPost, tagUser, removeTag, getAllPosts };
 });
