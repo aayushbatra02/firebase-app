@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-lightGray min-h-100vh pb-8 pt-[4rem] 3xl:pb-14 3xl:pt-[10rem] 3xl:text-3xl"
+    class="bg-lightGray min-h-[100vh] pb-8 pt-[4rem] 3xl:pb-14 3xl:pt-[10rem] 3xl:text-3xl"
   >
     <div class="w-max mx-auto bg-white shadow-lg rounded-xl 3xl:rounded-2xl">
       <div
