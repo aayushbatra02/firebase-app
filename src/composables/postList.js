@@ -46,43 +46,8 @@ export const usePostList = () => {
 
   window.addEventListener("scroll", handleScroll);
 
-  const plural = (number) => {
-    if (Math.floor(number) > 1) {
-      return "s";
-    }
-    return "";
-  };
-
   const getUploadTime = (time) => {
-    const now = Date.now();
-    const millisecodsPassed = now - time;
-    const duration = moment.duration(millisecodsPassed);
-
-    const seconds = Math.floor(duration.asSeconds());
-    const minutes = Math.floor(duration.asMinutes());
-    const hours = Math.floor(duration.asHours());
-    const days = Math.floor(duration.asDays());
-    const months = Math.floor(duration.asMonths());
-    const years = Math.floor(duration.asYears());
-
-    if (years) {
-      return `${years} year${plural(years)} ago`;
-    }
-    if (months) {
-      return `${months} month${plural(months)} ago`;
-    }
-    if (days) {
-      return `${days} day${plural(days)} ago`;
-    }
-    if (hours) {
-      return `${hours} hour${plural(hours)} ago`;
-    }
-    if (minutes) {
-      return `${minutes} minute${plural(minutes)} ago`;
-    }
-    if (seconds) {
-      return `${seconds} second${plural(seconds)} ago`;
-    }
+    return moment(time).fromNow();
   };
 
   const toggleDescription = (index) => {
