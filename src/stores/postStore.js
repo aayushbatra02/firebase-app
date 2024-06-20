@@ -70,9 +70,6 @@ export const usePostStore = defineStore("postStore", () => {
         },
       };
       addDoc(postsRef, post);
-      state.postList = [];
-      state.lastVisible = null;
-      getAllPosts(5);
     } catch (e) {
       console.error(e);
     }

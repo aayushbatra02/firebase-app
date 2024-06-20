@@ -1,13 +1,33 @@
 import { usePostStore } from "@/stores/postStore";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 export const usePostList = () => {
   const { getAllPosts } = usePostStore();
-  const { loadingPosts } = storeToRefs(usePostStore());
+  const { loadingPosts, lastVisible, postList } = storeToRefs(usePostStore());
+  const isExpanded = ref([]);
+  const showButton = ref([]);
+  const contentRef = ref([]);
 
-  onMounted(() => {
-    getAllPosts(5);
+  const buttonText = computed(() => {
+    return isExpanded.value.map((expanded) =>
+      expanded ? "Show less..." : "Show more..."
+    );
+  });
+
+  onMounted(async () => {
+    postList.value = [];
+    lastVisible.value = null;
+    await getAllPosts(5);
+    postList.value = usePostStore().postList;
+    isExpanded.value = new Array(postList.value.length).fill(false);
+    showButton.value = new Array(postList.value.length).fill(false);
+
+    contentRef.value.forEach((el, index) => {
+      if (el && el.scrollHeight > el.offsetHeight) {
+        showButton.value[index] = true;
+      }
+    });
   });
 
   const handleScroll = () => {
@@ -63,5 +83,22 @@ export const usePostList = () => {
       secondsPast / 31536000
     )} ago`;
   };
-  return { getUploadTime, handleScroll };
+
+  const toggleDescription = (index) => {
+    isExpanded.value[index] = !isExpanded.value[index];
+  };
+
+  const setContentRef = (index) => (el) => {
+    contentRef.value[index] = el;
+  };
+
+  return {
+    getUploadTime,
+    handleScroll,
+    isExpanded,
+    toggleDescription,
+    buttonText,
+    showButton,
+    setContentRef,
+  };
 };

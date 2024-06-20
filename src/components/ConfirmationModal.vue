@@ -14,7 +14,7 @@
       >
         {{ title }}
       </h1>
-      <P>{{ description }}</P>
+      <p>{{ description }}</p>
       <div class="flex gap-4">
         <button
           class="border-2 text-white px-12 py-2 text-xl rounded-lg hover:bg-[white] mt-4"
