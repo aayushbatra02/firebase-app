@@ -20,8 +20,6 @@ export const usePostList = () => {
     postList.value = [];
     lastVisible.value = null;
     await getAllPosts(5);
-    console.log('Mounted')
-    console.log(postList.value)
     postList.value = usePostStore().postList;
     isExpanded.value = new Array(postList.value.length).fill(false);
     showButton.value = new Array(postList.value.length).fill(false);

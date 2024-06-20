@@ -120,7 +120,7 @@ const {
 }
 
 .description li {
-  margin-left: 1rem;
+  margin-left: 1.5rem;
 }
 
 .description ul {
