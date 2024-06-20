@@ -94,23 +94,23 @@ export const usePostStore = defineStore("postStore", () => {
     }
     try {
       state.loadingPosts = true;
-      let q;
+      let firebaseQuery;
       if (state.lastVisible) {
-        q = query(
+        firebaseQuery = query(
           collection(db, "posts"),
           orderBy("createdAt", "desc"),
           startAfter(state.lastVisible),
           limit(5)
         );
       } else {
-        q = query(
+        firebaseQuery = query(
           collection(db, "posts"),
           orderBy("createdAt", "desc"),
           limit(5)
         );
       }
 
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(firebaseQuery);
       const newPosts = [];
       querySnapshot.forEach((doc) => {
         newPosts.push(doc.data());

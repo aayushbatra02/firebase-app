@@ -27,8 +27,8 @@ export const useUserStore = defineStore("userStore", () => {
     try {
       if (uid) {
         const usersRef = collection(db, "users");
-        const q = query(usersRef, where("uid", "==", uid));
-        const querySnapshot = await getDocs(q);
+        const firebaseQuery = query(usersRef, where("uid", "==", uid));
+        const querySnapshot = await getDocs(firebaseQuery);
         if (!querySnapshot.empty) {
           const doc = querySnapshot.docs[0];
           state.userDetails = doc.data();
