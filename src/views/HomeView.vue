@@ -119,6 +119,18 @@ const {
   display: inline;
 }
 
+.description li {
+  margin-left: 1rem;
+}
+
+.description ul {
+  list-style: disc;
+}
+
+.description ol {
+  list-style: decimal;
+}
+
 .description-container {
   position: relative;
   max-width: 600px;

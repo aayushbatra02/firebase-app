@@ -1,4 +1,5 @@
 import { usePostStore } from "@/stores/postStore";
+import moment from "moment";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
 
@@ -19,6 +20,8 @@ export const usePostList = () => {
     postList.value = [];
     lastVisible.value = null;
     await getAllPosts(5);
+    console.log('Mounted')
+    console.log(postList.value)
     postList.value = usePostStore().postList;
     isExpanded.value = new Array(postList.value.length).fill(false);
     showButton.value = new Array(postList.value.length).fill(false);
@@ -54,34 +57,34 @@ export const usePostList = () => {
 
   const getUploadTime = (time) => {
     const now = Date.now();
-    const secondsPast = (now - time) / 1000;
+    const millisecodsPassed = now - time;
+    const duration = moment.duration(millisecodsPassed);
 
-    if (secondsPast < 60) {
-      return `${Math.floor(secondsPast)} second${plural(secondsPast)} ago`;
+    const seconds = Math.floor(duration.asSeconds());
+    const minutes = Math.floor(duration.asMinutes());
+    const hours = Math.floor(duration.asHours());
+    const days = Math.floor(duration.asDays());
+    const months = Math.floor(duration.asMonths());
+    const years = Math.floor(duration.asYears());
+
+    if (years) {
+      return `${years} year${plural(years)} ago`;
     }
-    if (secondsPast < 3600) {
-      return `${Math.floor(secondsPast / 60)} minute${plural(
-        secondsPast / 60
-      )} ago`;
+    if (months) {
+      return `${months} month${plural(months)} ago`;
     }
-    if (secondsPast < 86400) {
-      return `${Math.floor(secondsPast / 3600)} hour${plural(
-        secondsPast / 3600
-      )} ago`;
+    if (days) {
+      return `${days} day${plural(days)} ago`;
     }
-    if (secondsPast < 2592000) {
-      return `${Math.floor(secondsPast / 86400)} day${plural(
-        secondsPast / 86400
-      )} ago`;
+    if (hours) {
+      return `${hours} hour${plural(hours)} ago`;
     }
-    if (secondsPast < 31536000) {
-      return `${Math.floor(secondsPast / 2592000)} month${plural(
-        secondsPast / 2592000
-      )} ago`;
+    if (minutes) {
+      return `${minutes} minute${plural(minutes)} ago`;
     }
-    return `${Math.floor(secondsPast / 31536000)} year${plural(
-      secondsPast / 31536000
-    )} ago`;
+    if (seconds) {
+      return `${seconds} second${plural(seconds)} ago`;
+    }
   };
 
   const toggleDescription = (index) => {
