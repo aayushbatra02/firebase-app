@@ -4,11 +4,25 @@ import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
 
 export const usePostList = () => {
-  const { getAllPosts } = usePostStore();
+  const { getAllPosts, AddCommentInPost, getSinglePost } = usePostStore();
   const { loadingPosts, lastVisible, postList } = storeToRefs(usePostStore());
   const isExpanded = ref([]);
   const showButton = ref([]);
   const contentRef = ref([]);
+  const isCommentBoxVisible = ref(false);
+  const selectedCommentPostId = ref(null);
+
+  const manageCommentBoxVisibility = async (id) => {
+    isCommentBoxVisible.value = !isCommentBoxVisible.value;
+    if (id) {
+      await getSinglePost(id);
+    }
+    selectedCommentPostId.value = id;
+  };
+
+  const addComment = async() => {
+    await AddCommentInPost(selectedCommentPostId.value);
+  };
 
   const buttonText = computed(() => {
     return isExpanded.value.map((expanded) =>
@@ -66,5 +80,8 @@ export const usePostList = () => {
     buttonText,
     showButton,
     setContentRef,
+    isCommentBoxVisible,
+    manageCommentBoxVisibility,
+    addComment,
   };
 };

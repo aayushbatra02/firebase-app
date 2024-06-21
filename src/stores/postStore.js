@@ -11,11 +11,14 @@ import { useUserStore } from "@/stores/userStore";
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   limit,
   orderBy,
   query,
   startAfter,
+  updateDoc,
 } from "firebase/firestore";
 
 export const usePostStore = defineStore("postStore", () => {
@@ -27,6 +30,9 @@ export const usePostStore = defineStore("postStore", () => {
     postList: [],
     lastVisible: null,
     noMorePosts: false,
+    postComment: "",
+    singlePost: {},
+    loadingPost: false,
   });
   const createPost = async (postDetails) => {
     try {
@@ -60,6 +66,7 @@ export const usePostStore = defineStore("postStore", () => {
         postImageUrl: downloadURL,
         descriptonImagesId: state.descriptonImagesId,
         taggedUsers: state.taggedUsers,
+        comments: [],
         createdAt,
         updatedAt,
         createdBy: userDetails.value.uid,
@@ -113,7 +120,7 @@ export const usePostStore = defineStore("postStore", () => {
       const querySnapshot = await getDocs(firebaseQuery);
       const newPosts = [];
       querySnapshot.forEach((doc) => {
-        newPosts.push(doc.data());
+        newPosts.push({ id: doc.id, ...doc.data() });
       });
       if (newPosts.length === 0) {
         state.noMorePosts = true;
@@ -127,5 +134,49 @@ export const usePostStore = defineStore("postStore", () => {
       state.loadingPosts = false;
     }
   };
-  return { ...toRefs(state), createPost, tagUser, removeTag, getAllPosts };
+
+  const getSinglePost = async (id) => {
+    try {
+      state.loadingPost = true;
+      const postRef = doc(db, "posts", id);
+      const postSnap = await getDoc(postRef);
+      if (postSnap.exists()) {
+        state.singlePost = { id: postSnap.id, ...postSnap.data() };
+      } else {
+        console.error("No such document!");
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.loadingPost = false;
+    }
+  };
+
+  const AddCommentInPost = async (id) => {
+    const postRef = doc(db, "posts", id);
+    const { userDetails } = storeToRefs(useUserStore());
+    const createdAt = Date.now();
+    const updatedAt = createdAt;
+    const updatedComments = [
+      ...state.singlePost?.comments,
+      {
+        userId: userDetails.value.id,
+        commentTitle: state.postComment,
+        createdAt,
+        updatedAt,
+      },
+    ];
+    await updateDoc(postRef, {
+      comments: updatedComments,
+    });
+  };
+  return {
+    ...toRefs(state),
+    createPost,
+    tagUser,
+    removeTag,
+    getAllPosts,
+    AddCommentInPost,
+    getSinglePost,
+  };
 });
