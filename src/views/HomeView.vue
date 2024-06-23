@@ -7,7 +7,7 @@
       <div
         v-for="(post, index) in postList"
         :key="post?.createdAt"
-        class="mt-8 bg-white shadow-lg pt-4 rounded-lg"
+        class="mt-8 bg-white shadow-lg py-4 rounded-lg"
       >
         <div class="m-4 3xl:m-8 flex gap-4 3xl:gap-8 items-center">
           <img
@@ -65,7 +65,7 @@
         </div>
         <div
           v-if="post?.taggedUsers.length !== 0"
-          class="p-4 3xl:p-8 pt-0 3xl:pt-0"
+          class="px-4 3xl:px-8"
         >
           <h3 class="font-bold">Tagged Users:</h3>
           <div class="flex gap-2 3xl:gap-4 mt-2 3xl:mt-4 flex-wrap">
@@ -103,6 +103,8 @@
       v-if="isCommentBoxVisible"
       @manage-comment-box-visibility="manageCommentBoxVisibility"
       @add-comment="addComment"
+      :add-comment-error-message="addCommentErrorMessage"
+      @validate="validate"
     />
   </div>
 </template>
@@ -126,6 +128,8 @@ const {
   isCommentBoxVisible,
   manageCommentBoxVisibility,
   addComment,
+  addCommentErrorMessage,
+  validate
 } = usePostList();
 </script>
 

@@ -23,7 +23,7 @@ export const useUserStore = defineStore("userStore", () => {
     });
   };
 
-  const getUserByUID = async (uid) => {
+  const getUserByUID = async (uid, user) => {
     try {
       if (uid) {
         const usersRef = collection(db, "users");
@@ -31,8 +31,12 @@ export const useUserStore = defineStore("userStore", () => {
         const querySnapshot = await getDocs(firebaseQuery);
         if (!querySnapshot.empty) {
           const doc = querySnapshot.docs[0];
-          state.userDetails = doc.data();
-          state.userDetails.id = doc.id;
+          if (user === "currentUser") {
+            state.userDetails = doc.data();
+            state.userDetails.id = doc.id;
+          } else {
+            return doc.data();
+          }
         } else {
           console.error("No user found with the specified UID");
         }

@@ -158,17 +158,18 @@ export const usePostStore = defineStore("postStore", () => {
     const createdAt = Date.now();
     const updatedAt = createdAt;
     const updatedComments = [
-      ...state.singlePost?.comments,
       {
-        userId: userDetails.value.id,
+        userId: userDetails.value.uid,
         commentTitle: state.postComment,
         createdAt,
         updatedAt,
       },
+      ...state.singlePost?.comments,
     ];
     await updateDoc(postRef, {
       comments: updatedComments,
     });
+    await getSinglePost(id);
   };
   return {
     ...toRefs(state),

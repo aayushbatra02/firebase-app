@@ -1,16 +1,21 @@
 import { usePostStore } from "@/stores/postStore";
+import { authenticate } from "@/utils/authenticate";
 import moment from "moment";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
 
 export const usePostList = () => {
   const { getAllPosts, AddCommentInPost, getSinglePost } = usePostStore();
-  const { loadingPosts, lastVisible, postList } = storeToRefs(usePostStore());
+  const { loadingPosts, lastVisible, postList, postComment } = storeToRefs(
+    usePostStore()
+  );
   const isExpanded = ref([]);
   const showButton = ref([]);
   const contentRef = ref([]);
   const isCommentBoxVisible = ref(false);
   const selectedCommentPostId = ref(null);
+  const addCommentErrorMessage = ref("");
+  const validateComment = ref(false);
 
   const manageCommentBoxVisibility = async (id) => {
     isCommentBoxVisible.value = !isCommentBoxVisible.value;
@@ -18,10 +23,23 @@ export const usePostList = () => {
       await getSinglePost(id);
     }
     selectedCommentPostId.value = id;
+    postComment.value = "";
+    addCommentErrorMessage.value = "";
+    validateComment.value = false;
   };
 
-  const addComment = async() => {
-    await AddCommentInPost(selectedCommentPostId.value);
+  const validate = () => {
+    if (validateComment.value) {
+      addCommentErrorMessage.value = authenticate("comment", postComment.value);
+    }
+  };
+
+  const addComment = async () => {
+    validateComment.value = true;
+    validate();
+    if (!addCommentErrorMessage.value) {
+      await AddCommentInPost(selectedCommentPostId.value);
+    }
   };
 
   const buttonText = computed(() => {
@@ -83,5 +101,7 @@ export const usePostList = () => {
     isCommentBoxVisible,
     manageCommentBoxVisibility,
     addComment,
+    addCommentErrorMessage,
+    validate,
   };
 };

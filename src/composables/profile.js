@@ -55,7 +55,7 @@ export const useProfile = () => {
 
   const updateUser = async () => {
     const user = await getCurrentUser();
-    await getUserByUID(user?.uid);
+    await getUserByUID(user?.uid, 'currentUser');
   };
 
   const validate = (fieldName) => {
