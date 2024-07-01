@@ -90,7 +90,7 @@ watch(
   () => route.path,
   async () => {
     const user = await getCurrentUser();
-    await getUserByUID(user?.uid);
+    await getUserByUID(user?.uid, 'currentUser');
   },
   { immediate: true }
 );

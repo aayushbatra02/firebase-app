@@ -100,7 +100,7 @@ export const useLoginStore = defineStore("loginStore", () => {
       const { userDetails: userDetailsFromFirebase } = storeToRefs(
         useUserStore()
       );
-      await getUserByUID(uid);
+      await getUserByUID(uid, 'currentUser');
       if (!(userDetailsFromFirebase.value)) {
         await createUserInFireStore(userDetails, uid, true);
       }

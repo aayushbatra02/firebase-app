@@ -7,7 +7,7 @@
       <div
         v-for="(post, index) in postList"
         :key="post?.createdAt"
-        class="mt-8 bg-white shadow-lg pt-4 rounded-lg"
+        class="mt-8 bg-white shadow-lg py-4 rounded-lg"
       >
         <div class="m-4 3xl:m-8 flex gap-4 3xl:gap-8 items-center">
           <img
@@ -25,7 +25,9 @@
             }}
           </div>
         </div>
-        <div class="text-center font-bold text-xl 3xl:text-3xl m-4 3xl:m-8">
+        <div
+          class="text-center font-bold text-xl 3xl:text-3xl m-4 3xl:m-8 break-words"
+        >
           {{ post?.title }}
         </div>
         <img
@@ -35,7 +37,10 @@
         <div class="description">
           <div
             v-html="post.description"
-            :class="['p-4 3xl:p-8 content', { expanded: isExpanded[index] }]"
+            :class="[
+              'p-4 3xl:p-8 overflow-hidden max-h-[8.5rem]',
+              { 'max-h-none': isExpanded[index] },
+            ]"
             :ref="setContentRef(index)"
           ></div>
           <button
@@ -51,10 +56,13 @@
             {{ buttonText[index] }}
           </button>
         </div>
-        <div
-          v-if="post?.taggedUsers.length !== 0"
-          class="p-4 3xl:p-8 pt-0 3xl:pt-0"
-        >
+        <div class="ml-4 mb-4">
+          <div @click="manageCommentBoxVisibility(post?.id)" class="flex gap-2 3xl:gap-4 items-center cursor-pointer">
+            <Icon icon="uil:comment" class="w-6 h-6" />
+            <span>{{post?.comments.length}} Comment{{ post.comments.length === 1 ? '' : 's' }}</span>
+          </div>
+        </div>
+        <div v-if="post?.taggedUsers.length !== 0" class="px-4 3xl:px-8">
           <h3 class="font-bold">Tagged Users:</h3>
           <div class="flex gap-2 3xl:gap-4 mt-2 3xl:mt-4 flex-wrap">
             <div
@@ -69,7 +77,7 @@
               <div
                 class="font-bold text-xs flex gap-1 sm:text-sm md:text-base 3xl:text-2xl"
               >
-                <span></span> <span>{{ user?.firstName }}</span>
+                <span>{{ user?.firstName }}</span>
                 <span>{{ user?.lastName }}</span>
               </div>
             </div>
@@ -87,6 +95,13 @@
     >
       <spinning-loader :large="true" />
     </div>
+    <comment-box
+      v-if="isCommentBoxVisible"
+      @manage-comment-box-visibility="manageCommentBoxVisibility"
+      @add-comment="addComment"
+      :add-comment-error-message="addCommentErrorMessage"
+      @validate="validate"
+    />
   </div>
 </template>
 
@@ -96,6 +111,7 @@ import { storeToRefs } from "pinia";
 import SpinningLoader from "@/components/SpinningLoader.vue";
 import { usePostList } from "@/composables/postList";
 import { usePostStore } from "@/stores/postStore";
+import CommentBox from "@/components/CommentBox.vue";
 
 const { postList, loadingPosts } = storeToRefs(usePostStore());
 const {
@@ -105,6 +121,11 @@ const {
   buttonText,
   showButton,
   setContentRef,
+  isCommentBoxVisible,
+  manageCommentBoxVisibility,
+  addComment,
+  addCommentErrorMessage,
+  validate,
 } = usePostList();
 </script>
 
@@ -129,21 +150,5 @@ const {
 
 .description ol {
   list-style: decimal;
-}
-
-.description-container {
-  position: relative;
-  max-width: 600px;
-  margin: auto;
-}
-
-.content {
-  overflow: hidden;
-  max-height: 8.5rem; /* Adjust based on how much you want to initially show */
-  transition: max-height 0.5s ease;
-}
-
-.content.expanded {
-  max-height: none;
 }
 </style>
