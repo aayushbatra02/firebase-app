@@ -14,16 +14,21 @@
       </div>
     </div>
     <p>{{ comment?.commentTitle }}</p>
-    <div class="flex gap-2 absolute top-2 right-2" v-if="commentedUser?.id === userDetails?.id">
+    <div class="flex gap-2 absolute top-2 right-2">
       <Icon
+        v-if="commentedUser?.id === userDetails?.id"
         icon="material-symbols:edit"
         class="w-5 h-5 text-green-700 cursor-pointer"
-        @click="() => console.log('edit')"
+        @click="setContentInField(comment?.commentTitle)"
       />
       <Icon
+        v-if="
+          commentedUser?.id === userDetails?.id ||
+          singlePost?.userDetails?.uid === userDetails?.uid
+        "
         icon="material-symbols:delete"
         class="w-5 h-5 text-red-500 cursor-pointer"
-        @click="() => console.log('delete')"
+        @click="deleteComment(comment?.createdAt)"
       />
     </div>
   </div>
@@ -33,12 +38,13 @@
 import { Icon } from "@iconify/vue";
 import { usePostList } from "@/composables/postList";
 import { useUserStore } from "@/stores/userStore";
-import { defineProps, onMounted, ref } from "vue";
+import { defineProps, onMounted, ref, defineEmits } from "vue";
 import { storeToRefs } from "pinia";
 
-const props = defineProps(["comment"]);
+const props = defineProps(["comment", "singlePost"]);
+defineEmits(["deleteComment"]);
 const { getUserByUID } = useUserStore();
-const { getUploadTime } = usePostList();
+const { getUploadTime, deleteComment, setContentInField } = usePostList();
 const commentedUser = ref({});
 const { userDetails } = storeToRefs(useUserStore());
 

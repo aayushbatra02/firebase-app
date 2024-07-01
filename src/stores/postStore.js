@@ -33,6 +33,8 @@ export const usePostStore = defineStore("postStore", () => {
     postComment: "",
     singlePost: {},
     loadingPost: false,
+    selectedCommentPostId:null,
+    inputFieldType:'add'
   });
   const createPost = async (postDetails) => {
     try {
@@ -74,6 +76,7 @@ export const usePostStore = defineStore("postStore", () => {
           firstName: userDetails.value.firstName,
           lastName: userDetails.value.lastName,
           profilePhoto: userDetails.value.profilePhoto,
+          uid: userDetails.value.uid,
         },
       };
       addDoc(postsRef, post);
@@ -96,7 +99,6 @@ export const usePostStore = defineStore("postStore", () => {
   };
 
   const getAllPosts = async () => {
-    console.log("HERE")
     if (state.noMorePosts) {
       return;
     }
@@ -153,30 +155,44 @@ export const usePostStore = defineStore("postStore", () => {
     }
   };
 
-  const AddCommentInPost = async (id) => {
-    const postRef = doc(db, "posts", id);
+  const manageComments = async (type, commentIndex) => {
+    const postRef = doc(db, "posts", state.selectedCommentPostId);
     const { userDetails } = storeToRefs(useUserStore());
     const createdAt = Date.now();
     const updatedAt = createdAt;
-    const updatedComments = [
-      {
-        userId: userDetails.value.uid,
-        commentTitle: state.postComment,
-        createdAt,
-        updatedAt,
-      },
-      ...state.singlePost?.comments,
-    ];
-    console.log(updatedComments, state.singlePost);
+    let updatedComments = [];
+    switch (type) {
+      case "add": {
+        updatedComments = [
+          {
+            userId: userDetails.value.uid,
+            commentTitle: state.postComment,
+            createdAt,
+            updatedAt,
+          },
+          ...state.singlePost?.comments,
+        ];
+        break;
+      }
+      case "edit": {
+        console.log("edit", commentIndex, state.postComment);
+        updatedComments = [...state.singlePost?.comments];
+        break;
+      }
+      case "delete": {
+        updatedComments = state.singlePost?.comments.filter((comment) => {
+          return comment.createdAt !== commentIndex
+        })
+        break;
+      }
+      default: {
+        updatedComments = [...state.singlePost?.comments];
+      }
+    }
     await updateDoc(postRef, {
-      // comments: updatedComments,
-      userDetails: {
-        ...state.singlePost.userDetails,
-        uid: 'WvYs7As577eYuDPgLbtzAKwLLLn1',
-      },
+      comments: updatedComments,
     });
-    console.log("DONE")
-    // await getSinglePost(id);
+    await getSinglePost(state.selectedCommentPostId);
   };
   return {
     ...toRefs(state),
@@ -184,7 +200,7 @@ export const usePostStore = defineStore("postStore", () => {
     tagUser,
     removeTag,
     getAllPosts,
-    AddCommentInPost,
+    manageComments,
     getSinglePost,
   };
 });

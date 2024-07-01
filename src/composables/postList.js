@@ -2,24 +2,24 @@ import { usePostStore } from "@/stores/postStore";
 import { authenticate } from "@/utils/authenticate";
 import moment from "moment";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 
 export const usePostList = () => {
-  const { getAllPosts, AddCommentInPost, getSinglePost } = usePostStore();
-  const { loadingPosts, lastVisible, postList, postComment } = storeToRefs(
+  const { getAllPosts, manageComments, getSinglePost } = usePostStore();
+  const { loadingPosts, postComment, selectedCommentPostId, inputFieldType } = storeToRefs(
     usePostStore()
   );
   const isExpanded = ref([]);
   const showButton = ref([]);
   const contentRef = ref([]);
   const isCommentBoxVisible = ref(false);
-  const selectedCommentPostId = ref(null);
   const addCommentErrorMessage = ref("");
   const validateComment = ref(false);
 
   const manageCommentBoxVisibility = async (id) => {
     isCommentBoxVisible.value = !isCommentBoxVisible.value;
     if (id) {
+      inputFieldType.value = 'add'
       await getSinglePost(id);
     }
     selectedCommentPostId.value = id;
@@ -38,32 +38,34 @@ export const usePostList = () => {
     validateComment.value = true;
     validate();
     if (!addCommentErrorMessage.value) {
-      await AddCommentInPost(selectedCommentPostId.value);
+      await manageComments('add');
       postComment.value = "";
       addCommentErrorMessage.value = "";
       validateComment.value = false;
     }
   };
 
+  const deleteComment = async (index) => {
+    await manageComments('delete', index)
+  }
+
+  const setContentInField = async (title) => {
+    inputFieldType.value = 'edit'
+    postComment.value = title
+    inputFieldType.value = 'edit'
+
+  }
+
+  const editComment = async (index) => {
+    console.log('in composable ',index)
+    await manageComments('edit', index)
+    inputFieldType.value = 'add'
+  }
+
   const buttonText = computed(() => {
     return isExpanded.value.map((expanded) =>
       expanded ? "Show less..." : "Show more..."
     );
-  });
-
-  onMounted(async () => {
-    postList.value = [];
-    lastVisible.value = null;
-    await getAllPosts(5);
-    postList.value = usePostStore().postList;
-    isExpanded.value = new Array(postList.value.length).fill(false);
-    showButton.value = new Array(postList.value.length).fill(false);
-
-    contentRef.value.forEach((el, index) => {
-      if (el && el.scrollHeight > el.offsetHeight) {
-        showButton.value[index] = true;
-      }
-    });
   });
 
   const handleScroll = () => {
@@ -106,5 +108,9 @@ export const usePostList = () => {
     addComment,
     addCommentErrorMessage,
     validate,
+    contentRef,
+    deleteComment,
+    setContentInField,
+    editComment
   };
 };

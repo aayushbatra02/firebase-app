@@ -18,7 +18,7 @@
         </div>
         <div v-else>
           <div v-for="comment in singlePost?.comments" :key="comment.createdAt">
-            <single-comment :comment="comment" />
+            <single-comment :comment="comment" :single-post="singlePost"/>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@
           placeholder="Add a Comment"
           v-model="postComment"
           @input="$emit('validate')"
-        /><button @click="$emit('addComment')">
+        /><button @click="() =>inputFieldType === 'add' ? $emit('addComment') : () => console.log(comment.createdAt, editComment)">
           <Icon icon="pepicons-pop:send" class="w-6 h-6 text-darkBlue" />
         </button>
       </div>
@@ -45,8 +45,11 @@ import { storeToRefs } from "pinia";
 import { defineEmits, defineProps } from "vue";
 import SpinningLoader from "./SpinningLoader.vue";
 import SingleComment from "./SingleComment.vue";
+import { usePostList } from "@/composables/postList";
 
 defineProps(["addCommentErrorMessage"]);
 defineEmits(["manageCommentBoxVisibility", "addComment", "validate"]);
-const { postComment, singlePost, loadingPost } = storeToRefs(usePostStore());
+
+const { postComment, singlePost, loadingPost, inputFieldType } = storeToRefs(usePostStore());
+const {editComment} = usePostList()
 </script>

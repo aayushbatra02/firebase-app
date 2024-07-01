@@ -57,9 +57,11 @@
           </button>
         </div>
         <div class="ml-4 mb-4">
-          <div @click="manageCommentBoxVisibility(post?.id)" class="flex gap-2 3xl:gap-4 items-center cursor-pointer">
+          <div
+            @click="manageCommentBoxVisibility(post?.id)"
+            class="flex gap-2 3xl:gap-4 items-center cursor-pointer"
+          >
             <Icon icon="uil:comment" class="w-6 h-6" />
-            <span>{{post?.comments.length}} Comment{{ post.comments.length === 1 ? '' : 's' }}</span>
           </div>
         </div>
         <div v-if="post?.taggedUsers.length !== 0" class="px-4 3xl:px-8">
@@ -112,8 +114,11 @@ import SpinningLoader from "@/components/SpinningLoader.vue";
 import { usePostList } from "@/composables/postList";
 import { usePostStore } from "@/stores/postStore";
 import CommentBox from "@/components/CommentBox.vue";
+import { onMounted } from "vue";
 
-const { postList, loadingPosts } = storeToRefs(usePostStore());
+const { postList, loadingPosts, lastVisible } = storeToRefs(usePostStore());
+const { getAllPosts } = usePostStore();
+
 const {
   getUploadTime,
   isExpanded,
@@ -126,7 +131,23 @@ const {
   addComment,
   addCommentErrorMessage,
   validate,
+  contentRef,
 } = usePostList();
+
+onMounted(async () => {
+  postList.value = [];
+  lastVisible.value = null;
+  await getAllPosts();
+  postList.value = usePostStore().postList;
+  isExpanded.value = new Array(postList.value.length).fill(false);
+  showButton.value = new Array(postList.value.length).fill(false);
+
+  contentRef.value.forEach((el, index) => {
+    if (el && el.scrollHeight > el.offsetHeight) {
+      showButton.value[index] = true;
+    }
+  });
+});
 </script>
 
 <style>
