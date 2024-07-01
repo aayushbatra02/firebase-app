@@ -96,6 +96,7 @@ export const usePostStore = defineStore("postStore", () => {
   };
 
   const getAllPosts = async () => {
+    console.log("HERE")
     if (state.noMorePosts) {
       return;
     }
@@ -166,10 +167,16 @@ export const usePostStore = defineStore("postStore", () => {
       },
       ...state.singlePost?.comments,
     ];
+    console.log(updatedComments, state.singlePost);
     await updateDoc(postRef, {
-      comments: updatedComments,
+      // comments: updatedComments,
+      userDetails: {
+        ...state.singlePost.userDetails,
+        uid: 'WvYs7As577eYuDPgLbtzAKwLLLn1',
+      },
     });
-    await getSinglePost(id);
+    console.log("DONE")
+    // await getSinglePost(id);
   };
   return {
     ...toRefs(state),

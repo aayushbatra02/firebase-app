@@ -57,16 +57,12 @@
           </button>
         </div>
         <div class="ml-4 mb-4">
-          <Icon
-            icon="uil:comment"
-            class="w-6 h-6 cursor-pointer"
-            @click="manageCommentBoxVisibility(post?.id)"
-          />
+          <div @click="manageCommentBoxVisibility(post?.id)" class="flex gap-2 3xl:gap-4 items-center cursor-pointer">
+            <Icon icon="uil:comment" class="w-6 h-6" />
+            <span>{{post?.comments.length}} Comment{{ post.comments.length === 1 ? '' : 's' }}</span>
+          </div>
         </div>
-        <div
-          v-if="post?.taggedUsers.length !== 0"
-          class="px-4 3xl:px-8"
-        >
+        <div v-if="post?.taggedUsers.length !== 0" class="px-4 3xl:px-8">
           <h3 class="font-bold">Tagged Users:</h3>
           <div class="flex gap-2 3xl:gap-4 mt-2 3xl:mt-4 flex-wrap">
             <div
@@ -129,7 +125,7 @@ const {
   manageCommentBoxVisibility,
   addComment,
   addCommentErrorMessage,
-  validate
+  validate,
 } = usePostList();
 </script>
 

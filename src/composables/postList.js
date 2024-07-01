@@ -39,6 +39,9 @@ export const usePostList = () => {
     validate();
     if (!addCommentErrorMessage.value) {
       await AddCommentInPost(selectedCommentPostId.value);
+      postComment.value = "";
+      addCommentErrorMessage.value = "";
+      validateComment.value = false;
     }
   };
 
