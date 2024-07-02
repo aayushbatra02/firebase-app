@@ -11,11 +11,14 @@ import { useUserStore } from "@/stores/userStore";
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   limit,
   orderBy,
   query,
   startAfter,
+  updateDoc,
 } from "firebase/firestore";
 
 export const usePostStore = defineStore("postStore", () => {
@@ -27,6 +30,11 @@ export const usePostStore = defineStore("postStore", () => {
     postList: [],
     lastVisible: null,
     noMorePosts: false,
+    postComment: "",
+    singlePost: {},
+    loadingPost: false,
+    selectedCommentPostId: null,
+    editCommentId: null,
   });
   const createPost = async (postDetails) => {
     try {
@@ -60,6 +68,7 @@ export const usePostStore = defineStore("postStore", () => {
         postImageUrl: downloadURL,
         descriptonImagesId: state.descriptonImagesId,
         taggedUsers: state.taggedUsers,
+        comments: [],
         createdAt,
         updatedAt,
         createdBy: userDetails.value.uid,
@@ -67,6 +76,7 @@ export const usePostStore = defineStore("postStore", () => {
           firstName: userDetails.value.firstName,
           lastName: userDetails.value.lastName,
           profilePhoto: userDetails.value.profilePhoto,
+          uid: userDetails.value.uid,
         },
       };
       addDoc(postsRef, post);
@@ -113,7 +123,7 @@ export const usePostStore = defineStore("postStore", () => {
       const querySnapshot = await getDocs(firebaseQuery);
       const newPosts = [];
       querySnapshot.forEach((doc) => {
-        newPosts.push(doc.data());
+        newPosts.push({ id: doc.id, ...doc.data() });
       });
       if (newPosts.length === 0) {
         state.noMorePosts = true;
@@ -127,5 +137,80 @@ export const usePostStore = defineStore("postStore", () => {
       state.loadingPosts = false;
     }
   };
-  return { ...toRefs(state), createPost, tagUser, removeTag, getAllPosts };
+
+  const getSinglePost = async (id) => {
+    try {
+      state.loadingPost = true;
+      const postRef = doc(db, "posts", id);
+      const postSnap = await getDoc(postRef);
+      if (postSnap.exists()) {
+        state.singlePost = { id: postSnap.id, ...postSnap.data() };
+      } else {
+        console.error("No such document!");
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.loadingPost = false;
+    }
+  };
+
+  const manageComments = async (type, commentIndex) => {
+    const postRef = doc(db, "posts", state.selectedCommentPostId);
+    const { userDetails } = storeToRefs(useUserStore());
+    const createdAt = Date.now();
+    const updatedAt = createdAt;
+    let updatedComments = [];
+    switch (type) {
+      case "add": {
+        updatedComments = [
+          {
+            userId: userDetails.value.uid,
+            commentTitle: state.postComment,
+            createdAt,
+            updatedAt,
+          },
+          ...state.singlePost?.comments,
+        ];
+        break;
+      }
+      case "edit": {
+        updatedComments = state.singlePost?.comments.map((comment) => {
+          if (comment.createdAt === state.editCommentId) {
+            comment.commentTitle = state.postComment;
+            comment.updatedAt = Date.now();
+          }
+          return comment
+        });
+        break;
+      }
+      case "delete": {
+        updatedComments = state.singlePost?.comments.filter((comment) => comment.createdAt !== commentIndex);
+        break;
+      }
+      default: {
+        updatedComments = [...state.singlePost?.comments];
+      }
+    }
+    await updateDoc(postRef, {
+      comments: updatedComments,
+    });
+    state.postList = state.postList.map((post) => {
+      if(post.id === state.selectedCommentPostId) {
+        post.comments = updatedComments
+      }
+      console.log(post)
+      return post
+    })
+    await getSinglePost(state.selectedCommentPostId);
+  };
+  return {
+    ...toRefs(state),
+    createPost,
+    tagUser,
+    removeTag,
+    getAllPosts,
+    manageComments,
+    getSinglePost,
+  };
 });

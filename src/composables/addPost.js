@@ -28,6 +28,7 @@ export const useAddPost = () => {
   const showConfirmationModal = ref(false);
   const showTagUserModal = ref(false);
 
+
   const manageConfirmationModalVisibility = (route) => {
     showConfirmationModal.value = !showConfirmationModal.value;
     if (!route) {
@@ -107,5 +108,6 @@ export const useAddPost = () => {
     goBack,
     showTagUserModal,
     changeTagUserModalVisibility,
+
   };
 };
